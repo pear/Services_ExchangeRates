@@ -19,11 +19,12 @@
  </maintainers>
 
  <release>
-  <version>0.4.1</version>
-  <date>2003-09-12</date>
-  <state>alpha</state>
+  <version>0.5.0</version>
+  <date>2004-02-22</date>
+  <state>beta</state>
   <notes>
-   * Fixed documentation install path
+   * Added National Bank of Israel driver (Thanks Simon Brüchner!)
+   * Everything seems pretty stable, so changed state to beta
   </notes>
   <filelist>
     <dir name="/" baseinstalldir="Services">
@@ -31,6 +32,7 @@
         <file role="php">Common.php</file>
         <file role="php">Rates_ECB.php</file>
         <file role="php">Rates_NBP.php</file>
+        <file role="php">Rates_NBI.php</file>
         <file role="php">Currencies_UN.php</file>
         <file role="php">Countries_UN.php</file>
       </dir>
@@ -40,6 +42,14 @@
   </filelist>
  </release>
  <changelog>
+  <release>
+   <version>0.4.1</version>
+   <date>2003-09-12</date>
+   <state>alpha</state>
+   <notes>
+    * Fixed documentation install path
+   </notes>
+  </release>
   <release>
    <version>0.4</version>
    <date>2003-08-28</date>
