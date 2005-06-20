@@ -16,15 +16,23 @@
    <email>marshall@exclupen.com</email>
    <role>lead</role>
   </maintainer>
+  <maintainer>
+   <user>cross</user>
+   <name>Colin Ross</name>
+   <role>developer</role>
+  </maintainer>
  </maintainers>
 
  <release>
-  <version>0.5.0</version>
-  <date>2004-02-22</date>
+  <version>0.6.0</version>
+  <date>2005-??-??</date>
   <state>beta</state>
   <notes>
-   * Added National Bank of Israel driver (Thanks Simon Brüchner!)
-   * Everything seems pretty stable, so changed state to beta
+   * Added boolean second argument to convert() to allow the user to disable 
+     formatting [mroch]
+   * Added optional parameters to format() to make it possible to change the
+     formatting options on a per-call basis, instead of only in the constructor
+     [mroch]     
   </notes>
   <filelist>
     <dir name="/" baseinstalldir="Services">
@@ -42,6 +50,29 @@
   </filelist>
  </release>
  <changelog>
+  <release>
+   <version>0.5.0</version>
+   <date>2004-02-22</date>
+   <state>beta</state>
+   <notes>
+    * Added National Bank of Israel driver (Thanks Simon Brüchner!)
+    * Everything seems pretty stable, so changed state to beta
+   </notes>
+   <filelist>
+     <dir name="/" baseinstalldir="Services">
+       <dir name="ExchangeRates">
+         <file role="php">Common.php</file>
+         <file role="php">Rates_ECB.php</file>
+         <file role="php">Rates_NBP.php</file>
+         <file role="php">Rates_NBI.php</file>
+         <file role="php">Currencies_UN.php</file>
+         <file role="php">Countries_UN.php</file>
+       </dir>
+       <file role="php">ExchangeRates.php</file>
+       <file role="doc">example.php</file>
+     </dir>
+   </filelist>
+  </release>
   <release>
    <version>0.4.1</version>
    <date>2003-09-12</date>

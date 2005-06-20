@@ -254,9 +254,10 @@ class Services_ExchangeRates {
     * @param string Currency code of original currency
     * @param string Currency code of target currency
     * @param double Amount of original currency to convert
+    * @param boolean Format the final currency (add commas, round, etc.)
     * @return mixed Currency converted to $to
     */
-    function convert($from, $to, $amount) {
+    function convert($from, $to, $amount, $format = true) {
     
         if ($this->isValidCurrency($from) && $this->isValidCurrency($to)) {
    
@@ -267,7 +268,7 @@ class Services_ExchangeRates {
             // Convert from base currency to $to
             $final = $this->rates[$to] * $base;
         
-            return $this->format($final);
+            return ($format) ? $this->format($final) : $final;
         
         }
         
@@ -284,16 +285,19 @@ class Services_ExchangeRates {
     * on the constructor to set these values.
     * 
     * @param double Number to format
+    * @param mixed  Number of decimal places to round to (null for default)
+    * @param mixed  Character to use for decimal point (null for default)
+    * @param mixed  Character to use for thousands separator (null for default)
     * @return string Formatted currency
     */
-    function format($amount) {
-        if ($this->_roundAutomatically == false) {
-            $decimals = '';
-        } else {
-            $decimals = $this->_roundToDecimal;
-        }
+    function format($amount, $roundTo = null, $decChar = null, $sep = null) {
+        $roundTo = (($this->_roundAutomatically == false) ?
+                   (($roundTo == null) ? $this->_roundToDecimal : $roundTo) :
+                   '');
+        $decCar  = ($decCar == null) ? $this->_decimalCharacter : $decCar;
+        $sep = ($sep == null) ? $this->_thousandsSeparator : $sep;
         
-        return number_format($amount, $decimals, $this->_decimalCharacter, $this->_thousandsSeparator);
+        return number_format($amount, $roundTo, $decCar, $sep);
     }
     
    /**
