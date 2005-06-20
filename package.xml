@@ -32,7 +32,9 @@
      formatting [mroch]
    * Added optional parameters to format() to make it possible to change the
      formatting options on a per-call basis, instead of only in the constructor
-     [mroch]     
+     [mroch]
+   * Fixed character encoding problems in package.xml (reported by danielc)
+     [mroch]
   </notes>
   <filelist>
     <dir name="/" baseinstalldir="Services">
@@ -55,7 +57,7 @@
    <date>2004-02-22</date>
    <state>beta</state>
    <notes>
-    * Added National Bank of Israel driver (Thanks Simon Brüchner!)
+    * Added National Bank of Israel driver (Thanks Simon Br&uuml;chner!)
     * Everything seems pretty stable, so changed state to beta
    </notes>
    <filelist>
