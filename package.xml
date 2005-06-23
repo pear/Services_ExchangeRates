@@ -28,6 +28,7 @@
   <date>2005-06-23</date>
   <state>beta</state>
   <notes>
+   * Updated XML Struct to be inline with ECB and UN changes [cross]
    * Added boolean second argument to convert() to allow the user to disable 
      formatting [mroch]
    * Added optional parameters to format() to make it possible to change the
@@ -35,7 +36,6 @@
      [mroch]
    * Fixed character encoding problems in package.xml (reported by danielc)
      [mroch]
-   * Updated XML Struct to be inline with ECB and UN changes [cross]
    * Added getRates() to return current rates in use [cross]
   </notes>
   <filelist>
