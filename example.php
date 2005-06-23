@@ -50,6 +50,8 @@ $conv = new Services_ExchangeRates('ECB', 'UN');
 <h1>Currency Converter</h1>
 
 <?php
+var_dump($conv->getRates('USD'));
+
 if (!empty($_POST['amount'])) {
    
     echo "<h1>";
@@ -61,7 +63,7 @@ if (!empty($_POST['amount'])) {
 } else {
     echo "<h1>Enter how much you want to convert!</h1>";
 }
-
+$options = array();
 foreach ($conv->validCurrencies as $code => $label) {
     $options .= '<option value="' . $code . '">' . $label . '</option>';
 }
