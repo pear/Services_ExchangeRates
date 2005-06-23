@@ -55,6 +55,7 @@ define('SERVICES_EXCHANGERATES_ERROR_RETRIEVAL_FAILED', 104);
  * @example ExchangeRates/docs/example.php
  *
  * @author Marshall Roch <marshall@exclupen.com>
+ * @author Colin Ross <cross@php.net>
  * @copyright Copyright 2003 Marshall Roch
  * @license http://www.php.net/license/2_02.txt PHP License 2.0
  * @package Services_ExchangeRates
@@ -203,7 +204,7 @@ class Services_ExchangeRates {
     * @param int Cache length
     * @return array Associative array containing the data requested
     */
-    function retrieveData($source, $cacheLenth) {
+    function retrieveData($source, $cacheLength) {
         include_once("Services/ExchangeRates/${source}.php");
         $classname = "Services_ExchangeRates_${source}";
         if (!class_exists($classname)) {
@@ -264,14 +265,10 @@ class Services_ExchangeRates {
             // Convert $from to whatever the base currency of the
             // exchange rate feed is.
             $base = (1 / $this->rates[$from]) * $amount;
-        
             // Convert from base currency to $to
             $final = $this->rates[$to] * $base;
-        
             return ($format) ? $this->format($final) : $final;
-        
         }
-        
         $this->raiseError('Unable to convert!', SERVICES_EXCHANGERATES_ERROR_CONVERSION_ERROR);
         return false;
         
@@ -299,7 +296,26 @@ class Services_ExchangeRates {
         
         return number_format($amount, $roundTo, $decCar, $sep);
     }
-    
+    /**
+     * Get all rates as compared to a reference currency
+     * 
+     * Returns an associative array with currency codes as keys and 
+     * formated rates as values, as computed against a reference currency.
+     * 
+     * @param string $referenceCurrency Reference currency code
+     * @return array List of currencies => rates
+     * @see Services_ExchangeRates::convert()
+     * @access public
+     */
+    function getRates ($referenceCurrency)
+    {
+        $rates = array();
+        foreach ($this->validCurrencies as $code => $name) {
+            $rates[$code] = $this->convert($referenceCurrency, $code, 1, false);
+        }
+        ksort($rates);
+        return $rates;
+    }
    /**
     * Set to debug mode
     *

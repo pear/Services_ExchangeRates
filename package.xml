@@ -19,6 +19,7 @@
   <maintainer>
    <user>cross</user>
    <name>Colin Ross</name>
+   <email>cross@php.net</email>
    <role>developer</role>
   </maintainer>
  </maintainers>
@@ -35,6 +36,7 @@
      [mroch]
    * Fixed character encoding problems in package.xml (reported by danielc)
      [mroch]
+   * Added getRates() to return current rates in use [cross]
   </notes>
   <filelist>
     <dir name="/" baseinstalldir="Services">
@@ -57,7 +59,7 @@
    <date>2004-02-22</date>
    <state>beta</state>
    <notes>
-    * Added National Bank of Israel driver (Thanks Simon Br&uuml;chner!)
+    * Added National Bank of Israel driver (Thanks Simon Br&#x00FC;chner!)
     * Everything seems pretty stable, so changed state to beta
    </notes>
    <filelist>
