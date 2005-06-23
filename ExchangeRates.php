@@ -290,10 +290,10 @@ class Services_ExchangeRates {
         $roundTo = (($this->_roundAutomatically == false) ?
                    (($roundTo == null) ? $this->_roundToDecimal : $roundTo) :
                    '');
-        $decCar  = ($decCar == null) ? $this->_decimalCharacter : $decCar;
+        $decChar  = ($decChar == null) ? $this->_decimalCharacter : $decChar;
         $sep = ($sep == null) ? $this->_thousandsSeparator : $sep;
         
-        return number_format($amount, $roundTo, $decCar, $sep);
+        return number_format($amount, $roundTo, $decChar, $sep);
     }
     /**
      * Get all rates as compared to a reference currency

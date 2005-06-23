@@ -38,7 +38,6 @@ require_once 'Services/ExchangeRates.php';
  *               it's the United Nations.
  */
 $conv = new Services_ExchangeRates('ECB', 'UN');
-
 ?>
 
 <html>
@@ -50,7 +49,6 @@ $conv = new Services_ExchangeRates('ECB', 'UN');
 <h1>Currency Converter</h1>
 
 <?php
-var_dump($conv->getRates('USD'));
 
 if (!empty($_POST['amount'])) {
    
