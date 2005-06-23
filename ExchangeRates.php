@@ -227,6 +227,7 @@ class Services_ExchangeRates {
     */
     function getValidCurrencies($currencies, $rates) {      
         // loop through list of currencies
+        $validCurrencies = array();
         foreach ($currencies as $code => $currency) {
             // check to see if that currency has a known exchange rate
             if (in_array($code, array_keys($rates))) {
@@ -234,9 +235,7 @@ class Services_ExchangeRates {
                 $validCurrencies[$code] = $currency;
             }
         }
-        
         asort($validCurrencies);
-        
         return $validCurrencies;
     }
     
