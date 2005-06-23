@@ -1,3 +1,4 @@
+86
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 // +----------------------------------------------------------------------+
@@ -79,7 +80,7 @@ class Services_ExchangeRates_Currencies_UN extends Services_ExchangeRates_Common
             // Filter out blank or unwanted elements
             if ($curr->name == "Currency") {
                 // loop through and put them into an array
-                $currencies[$curr->children[0]->content] = $curr->children[1]->content;
+                $currencies[$curr->children[1]->content] = $curr->children[3]->content;
             }
         }
         

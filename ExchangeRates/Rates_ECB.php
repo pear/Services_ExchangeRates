@@ -83,14 +83,16 @@ class Services_ExchangeRates_Rates_ECB extends Services_ExchangeRates_Common {
         $root = $this->retrieveXML($this->_feedXMLUrl, $cacheLength, $cacheDir);
     
         // set date published
-        $return['date'] = $root->children[2]->children[0]->attributes['time'];
+        $return['date'] = $root->children[5]->children[1]->attributes['time'];
         
         // get down to array of exchange rates
-        $xrates = $root->children[2]->children[0]->children;
+        $xrates = $root->children[5]->children[1]->children;
         
         // loop through and put them into an array
         foreach ($xrates as $rateinfo) {
-            $return['rates'][$rateinfo->attributes['currency']] = $rateinfo->attributes['rate'];
+            if ($rateinfo->name == 'Cube') {
+            	$return['rates'][$rateinfo->attributes['currency']] = $rateinfo->attributes['rate'];
+            }
         }
         
         return $return; 
