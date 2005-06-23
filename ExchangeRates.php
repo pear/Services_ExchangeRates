@@ -182,8 +182,8 @@ class Services_ExchangeRates {
     
         $rateData = $this->retrieveData('Rates_' . $ratesSource, $this->_cacheLengthRates);       
         $this->rates = $rateData['rates'];
-        $this->ratesUpdated = $rates['date'];
-        $this->ratesSource = $rates['source'];
+        $this->ratesUpdated = $rateData['date'];
+        $this->ratesSource = $rateData['source'];
         
         $this->currencies = $this->retrieveData('Currencies_' . $currencySource, $this->_cacheLengthCurrencies);
         
