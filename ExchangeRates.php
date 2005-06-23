@@ -287,7 +287,7 @@ class Services_ExchangeRates {
     * @return string Formatted currency
     */
     function format($amount, $roundTo = null, $decChar = null, $sep = null) {
-        $roundTo = (($this->_roundAutomatically == false) ?
+        $roundTo = (($this->_roundAutomatically) ?
                    (($roundTo == null) ? $this->_roundToDecimal : $roundTo) :
                    '');
         $decChar  = ($decChar == null) ? $this->_decimalCharacter : $decChar;
