@@ -23,7 +23,6 @@
    <role>developer</role>
   </maintainer>
  </maintainers>
-
  <release>
   <version>0.6.0</version>
   <date>2005-06-23</date>
@@ -36,6 +35,7 @@
      [mroch]
    * Fixed character encoding problems in package.xml (reported by danielc)
      [mroch]
+   * Updated XML Struct to be inline with ECB and UN changes [cross]
    * Added getRates() to return current rates in use [cross]
   </notes>
   <filelist>
