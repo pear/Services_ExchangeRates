@@ -20,22 +20,24 @@
    <user>cross</user>
    <name>Colin Ross</name>
    <email>cross@php.net</email>
-   <role>developer</role>
+   <role>lead</role>
   </maintainer>
  </maintainers>
  <release>
   <version>0.5.2</version>
-  <date>2005-06-23</date>
+  <date>2005-11-22</date>
   <state>beta</state>
   <notes>
+   * Re-released with fixed package.xml
+   * As far as I can tell, M. Roch is not activly developing this package, so I will set him as inactive in the project.
+   * Fixed character encoding problems in package.xml (reported by danielc)
+     [mroch] [cross 11/22/2005]
    * Updated XML Struct to be inline with ECB and UN changes [cross]
    * Added boolean second argument to convert() to allow the user to disable 
      formatting [mroch]
    * Added optional parameters to format() to make it possible to change the
      formatting options on a per-call basis, instead of only in the constructor
      [mroch]
-   * Fixed character encoding problems in package.xml (reported by danielc)
-     [mroch] [cross 11/21/2005]
    * Added getRates() to return current rates in use [cross]
   </notes>
   <filelist>
