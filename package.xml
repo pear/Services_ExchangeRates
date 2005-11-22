@@ -35,7 +35,7 @@
      formatting options on a per-call basis, instead of only in the constructor
      [mroch]
    * Fixed character encoding problems in package.xml (reported by danielc)
-     [mroch]
+     [mroch] [cross 11/21/2005]
    * Added getRates() to return current rates in use [cross]
   </notes>
   <filelist>
@@ -59,7 +59,7 @@
    <date>2004-02-22</date>
    <state>beta</state>
    <notes>
-    * Added National Bank of Israel driver (Thanks Simon Br&#x00FC;chner!)
+    * Added National Bank of Israel driver (Thanks Simon Br&#xfc;chner!)
     * Everything seems pretty stable, so changed state to beta
    </notes>
    <filelist>
