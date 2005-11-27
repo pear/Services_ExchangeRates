@@ -32,6 +32,7 @@ define('SERVICES_EXCHANGERATES_ERROR_INVALID_DRIVER', 101);
 define('SERVICES_EXCHANGERATES_ERROR_INVALID_CURRENCY', 102);
 define('SERVICES_EXCHANGERATES_ERROR_CONVERSION_ERROR', 103);
 define('SERVICES_EXCHANGERATES_ERROR_RETRIEVAL_FAILED', 104);
+define('SERVICES_EXCHANGERATES_ERROR_INVALID_DATA', 105);
 /**#@-*/
 
 /**
@@ -61,41 +62,41 @@ define('SERVICES_EXCHANGERATES_ERROR_RETRIEVAL_FAILED', 104);
  * @package Services_ExchangeRates
  */
 class Services_ExchangeRates {
-
+   var $options = array(
    /**
     * Sets the number of places to round the currencies to at the end
     * @access private
     * @var int
     */
-    var $_roundToDecimal = 2;
+    'roundToDecimal' => 2,
 
    /**
     * Determines whether the returned conversion is rounded or not
     * @access private
     * @var bool
     */
-    var $_roundAutomatically = true;
+    'roundAutomatically' => true,
     
    /**
     * Defines single character used to separate each group of thousands in returned conversion
     * @access private
     * @var string
     */
-    var $_thousandsSeparator = ",";
+    'thousandsSeparator' => ",",
     
    /**
     * Defines single character to use as a decimal place in returned conversion
     * @access private
     * @var string
     */
-    var $_decimalCharacter = ".";
+    'decimalCharacter' => ".",
     
    /**
     * Sets the path to where cache files are stored (don't forget the trailing slash!)
     * @access private
     * @var string
     */
-    var $_cacheDirectory = '/tmp/';
+    'cacheDirectory' => '', // todo: default this to ini_get(session.save_path)
     
    /**
     * Sets the length (in seconds) to cache the exchange rate data. This information
@@ -103,7 +104,7 @@ class Services_ExchangeRates {
     * @access private
     * @var int
     */
-    var $_cacheLengthRates = 3600;
+    'cacheLengthRates' => 3600,
     
    /**
     * Sets the length (in seconds) to cache the list of currencies.  This information
@@ -111,7 +112,7 @@ class Services_ExchangeRates {
     * @access private
     * @var int
     */
-    var $_cacheLengthCurrencies = 2419200;
+    'cacheLengthCurrencies' => 2419200,
     
    /**
     * Sets the length (in seconds) to cache the list of countries.  This information
@@ -119,7 +120,7 @@ class Services_ExchangeRates {
     * @access private
     * @var int
     */
-    var $_cacheLengthCountries = 2419200;
+    'cacheLengthCountries' => 2419200,
     
    /**
     * PEAR error mode (when raiseError is called)
@@ -128,7 +129,8 @@ class Services_ExchangeRates {
     * @access private
     * @var int
     */
-    var $_pearErrorMode = SERVICES_EXCHANGERATES_ERROR_RETURN;
+    'pearErrorMode' => SERVICES_EXCHANGERATES_ERROR_RETURN
+   )// end $options array
     
    /**
     * Constructor
@@ -176,7 +178,7 @@ class Services_ExchangeRates {
         foreach($options as $key => $value) {
             if(in_array($key, $availableOptions)) {
                 $property = '_'.$key;
-                $this->$property = $value;
+                $this->$options[$property] = $value;
             }
         }
     
