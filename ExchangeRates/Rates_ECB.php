@@ -48,7 +48,6 @@ require_once 'Services/ExchangeRates/Common.php';
  * @package Services_ExchangeRates
  */
 class Services_ExchangeRates_Rates_ECB extends Services_ExchangeRates_Common {
-
    /**
     * URL of XML feed
     * @access private
@@ -94,11 +93,8 @@ class Services_ExchangeRates_Rates_ECB extends Services_ExchangeRates_Common {
             	$return['rates'][$rateinfo->attributes['currency']] = $rateinfo->attributes['rate'];
             }
         }
-        
         return $return; 
-
     }
-
 }
 
 ?>

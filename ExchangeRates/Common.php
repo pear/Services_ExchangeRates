@@ -88,10 +88,8 @@ class Services_ExchangeRates_Common {
                 }
             }
         }
-        
         Services_ExchangeRates::raiseError("Unable to retrieve file ${url} (unknown reason)", SERVICES_EXCHANGERATES_ERROR_RETRIEVAL_FAILED);
         return false;
-        
     }
     
    /**
