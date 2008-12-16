@@ -130,7 +130,7 @@ class Services_ExchangeRates {
     * @var int
     */
     'pearErrorMode' => SERVICES_EXCHANGERATES_ERROR_RETURN
-   )// end $options array
+   );// end $options array
     
    /**
     * Constructor
