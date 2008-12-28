@@ -94,4 +94,21 @@ class Services_ExchangeRatesTest extends PHPUnit_Framework_TestCase {
         $this->assertSame(array('AUD' => 'Australian Dollar'),
                           $rates->getValidCurrencies($mock_currencies, $mock_rates));
     }
+
+    public function testShouldValidateCurrencyCode() {
+        $this->markTestIncomplete(" No coverage of: isValidCurrency($code)");
+    }
+
+    public function testShouldConvertOriginalCurrencyToNewCurrency() {
+        $this->markTestIncomplete(" No coverage of: convert($from, $to, $amount, $format = true)");
+    }
+    
+    public function testShouldFormatCurrency() {
+        $this->markTestIncomplete(" No coverage of: format($amount, $roundTo = null, $decChar = null, $sep = null)");
+    }
+
+    public function testShouldFetchAllRates() {
+        $this->markTestIncomplete(" No coverage of: getRates($referenceCurrency)");
+    }
+
 }
