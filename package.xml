@@ -20,7 +20,7 @@ supported depends on the exchange rate feed used).</description>
   <active>yes</active>
  </lead>
  <date>2008-12-29</date>
- <time>03:11:26</time>
+ <time>03:12:57</time>
  <version>
   <release>0.6.0</release>
   <api>0.6.0</api>
@@ -63,7 +63,7 @@ Be aware: You&apos;ll have to update code which was using 0.5.X API!</notes>
  <dependencies>
   <required>
    <php>
-    <min>4.0.0</min>
+    <min>4.3.0</min>
    </php>
    <pearinstaller>
     <min>1.4.0b1</min>
@@ -79,6 +79,7 @@ Be aware: You&apos;ll have to update code which was using 0.5.X API!</notes>
    <package>
     <name>XML_Tree</name>
     <channel>pear.php.net</channel>
+    <min>2.0.0RC2</min>
    </package>
   </required>
  </dependencies>
