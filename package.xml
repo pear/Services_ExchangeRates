@@ -1,143 +1,188 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<package version="1.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.7.2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
  <name>Services_ExchangeRates</name>
+ <channel>pear.php.net</channel>
  <summary>Performs currency conversion</summary>
- <description>
-    Extendable to work with any source that provides exchange rate data, this class downloads
-    exchange rates and the name of each currency (US Dollar, Euro, Maltese Lira, etc.) and 
-    converts between any two of the available currencies (the actual number of currencies 
-    supported depends on the exchange rate feed used).
+ <description>Extendable to work with any source that provides exchange rate data, this class downloads
+exchange rates and the name of each currency (US Dollar, Euro, Maltese Lira, etc.) and 
+converts between any two of the available currencies (the actual number of currencies 
+supported depends on the exchange rate feed used).
  </description>
- <license>PHP License</license>
- <maintainers>
-  <maintainer>
-   <user>mroch</user>
-   <name>Marshall Roch</name>
-   <email>marshall@exclupen.com</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>cross</user>
-   <name>Colin Ross</name>
-   <email>cross@php.net</email>
-   <role>lead</role>
-  </maintainer>
- </maintainers>
- <release>
-  <version>0.5.3</version>
-  <date>2005-11-22</date>
-  <state>beta</state>
-  <notes>
-   * Re-released with fixed package.xml
-   * As far as I can tell, M. Roch is not activly developing this package, so I will set him as inactive in the project.
-   * Fixed character encoding problems in package.xml (reported by danielc)
-     [mroch] [cross 11/22/2005]
-   * Updated XML Struct to be inline with ECB and UN changes [cross]
-   * Added boolean second argument to convert() to allow the user to disable 
-     formatting [mroch]
-   * Added optional parameters to format() to make it possible to change the
-     formatting options on a per-call basis, instead of only in the constructor
-     [mroch]
-   * Added getRates() to return current rates in use [cross]
-  </notes>
-  <filelist>
-    <dir name="/" baseinstalldir="Services">
-      <dir name="ExchangeRates">
-        <file role="php">Common.php</file>
-        <file role="php">Rates_ECB.php</file>
-        <file role="php">Rates_NBP.php</file>
-        <file role="php">Rates_NBI.php</file>
-        <file role="php">Currencies_UN.php</file>
-        <file role="php">Countries_UN.php</file>
-      </dir>
-      <file role="php">ExchangeRates.php</file>
-      <file role="doc">example.php</file>
-    </dir>
-  </filelist>
- </release>
+ <lead>
+  <name>Marshall Roch</name>
+  <user>mroch</user>
+  <email>marshall@exclupen.com</email>
+  <active>yes</active>
+ </lead>
+ <lead>
+  <name>Colin Ross</name>
+  <user>cross</user>
+  <email>cross@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2008-12-29</date>
+ <time>03:08:55</time>
+ <version>
+  <release>0.5.3</release>
+  <api>0.5.3</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>beta</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP License</license>
+ <notes>* Re-released with fixed package.xml
+* As far as I can tell, M. Roch is not activly developing this package, so I will set him as inactive in the project.
+* Fixed character encoding problems in package.xml (reported by danielc)
+  [mroch] [cross 11/22/2005]
+* Updated XML Struct to be inline with ECB and UN changes [cross]
+* Added boolean second argument to convert() to allow the user to disable 
+  formatting [mroch]
+* Added optional parameters to format() to make it possible to change the
+  formatting options on a per-call basis, instead of only in the constructor
+  [mroch]
+* Added getRates() to return current rates in use [cross]
+ </notes>
+ <contents>
+  <dir name="/">
+   <dir name="ExchangeRates">
+    <file baseinstalldir="Services" name="Common.php" role="php" />
+    <file baseinstalldir="Services" name="Countries_UN.php" role="php" />
+    <file baseinstalldir="Services" name="Currencies_UN.php" role="php" />
+    <file baseinstalldir="Services" name="Rates_ECB.php" role="php" />
+    <file baseinstalldir="Services" name="Rates_NBI.php" role="php" />
+    <file baseinstalldir="Services" name="Rates_NBP.php" role="php" />
+   </dir> <!-- //ExchangeRates -->
+   <file baseinstalldir="Services" name="example.php" role="doc" />
+   <file baseinstalldir="Services" name="ExchangeRates.php" role="php" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.0.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+   <package>
+    <name>HTTP_Request</name>
+    <channel>pear.php.net</channel>
+   </package>
+   <package>
+    <name>Cache_Lite</name>
+    <channel>pear.php.net</channel>
+   </package>
+   <package>
+    <name>XML_Tree</name>
+    <channel>pear.php.net</channel>
+   </package>
+  </required>
+ </dependencies>
+ <phprelease />
  <changelog>
   <release>
-   <version>0.5.0</version>
+   <version>
+    <release>0.5.0</release>
+    <api>0.5.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
    <date>2004-02-22</date>
-   <state>beta</state>
-   <notes>
-    * Added National Bank of Israel driver (Thanks Simon Br&#xfc;chner!)
-    * Everything seems pretty stable, so changed state to beta
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>* Added National Bank of Israel driver (Thanks Simon Brüchner!)
+* Everything seems pretty stable, so changed state to beta
    </notes>
-   <filelist>
-     <dir name="/" baseinstalldir="Services">
-       <dir name="ExchangeRates">
-         <file role="php">Common.php</file>
-         <file role="php">Rates_ECB.php</file>
-         <file role="php">Rates_NBP.php</file>
-         <file role="php">Rates_NBI.php</file>
-         <file role="php">Currencies_UN.php</file>
-         <file role="php">Countries_UN.php</file>
-       </dir>
-       <file role="php">ExchangeRates.php</file>
-       <file role="doc">example.php</file>
-     </dir>
-   </filelist>
   </release>
   <release>
-   <version>0.4.1</version>
+   <version>
+    <release>0.4.1</release>
+    <api>0.4.1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
    <date>2003-09-12</date>
-   <state>alpha</state>
-   <notes>
-    * Fixed documentation install path
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>* Fixed documentation install path
    </notes>
   </release>
   <release>
-   <version>0.4</version>
+   <version>
+    <release>0.4</release>
+    <api>0.4</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
    <date>2003-08-28</date>
-   <state>alpha</state>
-   <notes>
-    * Changed package name from Services_Exchange to Services_ExchangeRates
-    * Implemented conditional GETs with HTTP_Request and Cache_Lite
-    * Improved file retrieval/caching methods in Common.php
-    * Allowed default settings to be overridden with $options parameter in the constructor
-    * Implemented PEAR error handling
-    * Added National Bank of Poland exchange rate driver
-    * Added dependency on HTTP_Request
-    * Added dependency on Cache_Lite
-    * Removed dependency on Cache
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>* Changed package name from Services_Exchange to Services_ExchangeRates
+* Implemented conditional GETs with HTTP_Request and Cache_Lite
+* Improved file retrieval/caching methods in Common.php
+* Allowed default settings to be overridden with $options parameter in the constructor
+* Implemented PEAR error handling
+* Added National Bank of Poland exchange rate driver
+* Added dependency on HTTP_Request
+* Added dependency on Cache_Lite
+* Removed dependency on Cache
    </notes>
   </release>
   <release>
-   <version>0.3</version>
+   <version>
+    <release>0.3</release>
+    <api>0.3</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
    <date>2003-08-28</date>
-   <state>alpha</state>
-   <notes>
-    * Changed package name from Payment_Exchange to Services_Exchange
-    * Generalized data retrieval by creating drivers for all data feeds
-    * Created Common.php to store common parsing mechanisms (XML parsing,
-      CSV parsing, database querying, etc).  XML is the only one currently
-      supported, but others can be added as needed.
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>* Changed package name from Payment_Exchange to Services_Exchange
+* Generalized data retrieval by creating drivers for all data feeds
+* Created Common.php to store common parsing mechanisms (XML parsing,
+  CSV parsing, database querying, etc).  XML is the only one currently
+  supported, but others can be added as needed.
    </notes>
   </release>
   <release>
-   <version>0.2</version>
+   <version>
+    <release>0.2</release>
+    <api>0.2</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
    <date>2003-08-27</date>
-   <state>alpha</state>
-   <notes>
-    * Quit using XML_Serializer since it would have required an ugly patch
-    * Now using XML_Tree to parse XML files
-    * Improved documentation
-    * Added additional number formatting options
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>* Quit using XML_Serializer since it would have required an ugly patch
+* Now using XML_Tree to parse XML files
+* Improved documentation
+* Added additional number formatting options
    </notes>
   </release>
   <release>
-   <version>0.1</version>
+   <version>
+    <release>0.1</release>
+    <api>0.1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
    <date>2003-08-26</date>
-   <state>alpha</state>
-   <notes>
-    This is the first release.
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>This is the first release.
    </notes>
   </release>
  </changelog>
- <deps>
-  <dep type="pkg" rel="has">HTTP_Request</dep>
-  <dep type="pkg" rel="has">Cache_Lite</dep>
-  <dep type="pkg" rel="has">XML_Tree</dep>
- </deps>
 </package>
