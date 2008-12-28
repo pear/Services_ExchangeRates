@@ -59,11 +59,13 @@ require_once 'Services/ExchangeRates/Transport/Default.php';
  *
  * @author Marshall Roch <marshall@exclupen.com>
  * @author Colin Ross <cross@php.net>
+ * @author Daniel O'Connor <daniel.oconnor@gmail.com>
  * @copyright Copyright 2003 Marshall Roch
  * @license http://www.php.net/license/2_02.txt PHP License 2.0
  * @package Services_ExchangeRates
  */
-class Services_ExchangeRates {
+class Services_ExchangeRates
+{
    var $options = array(
    /**
     * Sets the number of places to round the currencies to at the end
@@ -91,23 +93,14 @@ class Services_ExchangeRates {
     * @access private
     * @var string
     */
-    'decimalCharacter' => ".",
-
-   /**
-    * PEAR error mode (when raiseError is called)
-    *
-    * @see setToDebug()
-    * @access private
-    * @var int
-    */
-    'pearErrorMode' => SERVICES_EXCHANGERATES_ERROR_RETURN
+    'decimalCharacter' => "."
    );// end $options array
     
    /**
     * Constructor
     *
     * This method overrides any default settings based on the $options
-    * parameter and retrieves feed data from the cache or their sources.
+    * parameter and retrieves feed data from their sources.
     *
     * $options is an associative array:
     * <code>
@@ -116,23 +109,13 @@ class Services_ExchangeRates {
     *     'roundAutomatically'    => whether to automatically round to 
     *                                $roundToDecimal digits (bool),
     *     'thousandsSeparator'    => character to separate every 1000 (string),
-    *     'decimalCharacter'      => character for decimal place (string),
-    *     'cacheDirectory'        => path (with trailing slash) to store cache 
-    *                                files (string),
-    *     'cacheLengthRates'      => length of time to cache exchange rates 
-    *                                file (int),
-    *     'cacheLengthCurrencies' => length of time to cache currency 
-    *                                list (int),
-    *     'cacheLengthCountries'  => length of time to cache country list (int),
-    *     'pearErrorMode'         => pear error mode (int));
+    *     'decimalCharacter'      => character for decimal place (string));
     * </code>
     *
-    * @param string Driver name (filename minus 'Rates_' and .php) for exchange rate feed
-    * @param string Driver name for currency code list
-    * @param string Driver name for country code list (not yet used for anything)
     * @param array  Array to override default settings
     */
-    function Services_ExchangeRates($options = array()) {
+    function Services_ExchangeRates($options = array()) 
+    {
                                
         $availableOptions = array('roundToDecimal',
                                   'roundAutomatically',
@@ -155,28 +138,66 @@ class Services_ExchangeRates {
         $this->setTransport($transport);
     }
 
-
-    function setTransport($transport) {
+    /**
+     * Set the default transport to be used in Services_ExchangeRates_Common 
+     * and other classes instantiated with factory()
+     *
+     * @param Services_ExchangeRates_Transport $transport A class which implements a fetch() method
+     *
+     * @see factory()
+     * @return void
+     */
+    function setTransport($transport) 
+    {
         $this->transport = $transport;
     }
 
-    function fetch($rates, $currency) {
+    /**
+     * Load all data from given drivers.
+     *
+     * <code>
+     * $rates = new Services_ExchangeRates();
+     * 
+     * $rateProvider     = $rates->factory('Rates_ECB');
+     * $currencyProvider = $rates->factory('Currencies_UN');
+     * 
+     * $rates->fetch($rateProvider, $currencyProvider);
+     * 
+     * var_dump($rates->rates["AFA"]); // 1.234
+     * var_dump($rates->ratesUpdated); // 2008-12-24
+     * var_dump($rates->validCurrencies); 
+     * var_dump($rates->currencies); 
+     * var_dump($rates->rates); 
+     * </code>
+     *
+     * @param Services_ExchangeRates_Rates $rates      A data provider of rates information
+     * @param Services_ExchangeRates_Rates $currencies A data provider of currencies information
+     *
+     * @see factory()
+     * @return void
+     */
+    function fetch($rates, $currencies) 
+    {
         $rateData = $rates->retrieve();
 
         $this->rates = $rateData['rates'];
         $this->ratesUpdated = $rateData['date'];
         $this->ratesSource = $rateData['source'];
         
-        $this->currencies = $currency->retrieve();
+        $this->currencies = $currencies->retrieve();
         
         $this->validCurrencies = $this->getValidCurrencies($this->currencies, $this->rates);
     }
 
-    public function setCache($cache) {
-        $this->cache = $cache;
-    }    
-
-    function factory($source) {
+    /**
+     * Instantiate a Rates or Currencies class
+     *
+     * @param string $source Driver name - ie, Currencies_UN or Rates_NBI
+     *
+     * @return Services_ExchangeRates_Common
+     */
+    function factory($source) 
+    {
         include_once "Services/ExchangeRates/${source}.php";
 
         $classname = "Services_ExchangeRates_${source}";
@@ -188,32 +209,35 @@ class Services_ExchangeRates {
         return $class;
     }
 
-   /**
-    * Factory
-    *
-    * Includes the necessary driver, instantiates the class, retrieves the feed,
-    * and returns an associative array.
-    *
-    * @param string Driver filename (minus .php; this includes 'Rates_', etc.)
-    * @param int Cache length
-    * @return array Associative array containing the data requested
-    */
-    function retrieveData($source) {
+    /**
+     * Factory
+     *
+     * Includes the necessary driver, instantiates the class, retrieves the feed,
+     * and returns an associative array.
+     *
+     * @param string Driver filename (minus .php; this includes 'Rates_', etc.)
+     *
+     * @return array Associative array containing the data requested
+     */
+    function retrieveData($source) 
+    {
         $class = $this->factory($source);
         return $class->retrieve();
     }
           
-   /**
-    * Get list of currencies with known exchange rates
-    *
-    * Creates an array of currency codes and their names, based on
-    * overlapping elements in $rates and $currencies.
-    *
-    * @param array Array of currency codes to currency names
-    * @param array Array of currency codes to exchange rates
-    * @return array Array of currency codes to currency names that have a known exchange rate (sorted alphabetically)
-    */
-    function getValidCurrencies($currencies, $rates) {      
+    /**
+     * Get list of currencies with known exchange rates
+     *
+     * Creates an array of currency codes and their names, based on
+     * overlapping elements in $rates and $currencies.
+     *
+     * @param array Array of currency codes to currency names
+     * @param array Array of currency codes to exchange rates
+     *
+     * @return array Array of currency codes to currency names that have a known exchange rate (sorted alphabetically)
+     */
+    function getValidCurrencies($currencies, $rates) 
+    {      
         // loop through list of currencies
         $validCurrencies = array();
         foreach ($currencies as $code => $currency) {
@@ -226,8 +250,16 @@ class Services_ExchangeRates {
         asort($validCurrencies);
         return $validCurrencies;
     }
-    
-    function isValidCurrency($code) {
+
+    /**
+     * Check if this is a valid currency
+     *
+     * @param string $code Currency Code
+     *
+     * @return bool
+     */
+    function isValidCurrency($code) 
+    {
         if (!in_array($code, array_keys($this->validCurrencies))) {
             $this->raiseError('Error: Invalid currency: ' . $code, SERVICES_EXCHANGERATES_ERROR_INVALID_CURRENCY);
             return false;
@@ -236,16 +268,18 @@ class Services_ExchangeRates {
         return true;
     }
     
-   /**
-    * Convert currencies
-    *
-    * @param string Currency code of original currency
-    * @param string Currency code of target currency
-    * @param double Amount of original currency to convert
-    * @param boolean Format the final currency (add commas, round, etc.)
-    * @return mixed Currency converted to $to
-    */
-    function convert($from, $to, $amount, $format = true) {
+    /**
+     * Convert currencies
+     *
+     * @param string  Currency code of original currency
+     * @param string  Currency code of target currency
+     * @param double  Amount of original currency to convert
+     * @param boolean Format the final currency (add commas, round, etc.)
+     *
+     * @return mixed Currency converted to $to
+     */
+    function convert($from, $to, $amount, $format = true) 
+    {
     
         if ($this->isValidCurrency($from) && $this->isValidCurrency($to)) {
    
@@ -261,19 +295,20 @@ class Services_ExchangeRates {
         
     }
     
-   /**
-    * Formats the converted currency
-    *
-    * This method adds $this->_thousandsSeparator between every group of thousands,
-    * and rounds to $this->_roundToDecimal decimal places.  Use the $options parameter
-    * on the constructor to set these values.
-    * 
-    * @param double Number to format
-    * @param mixed  Number of decimal places to round to (null for default)
-    * @param mixed  Character to use for decimal point (null for default)
-    * @param mixed  Character to use for thousands separator (null for default)
-    * @return string Formatted currency
-    */
+    /**
+     * Formats the converted currency
+     *
+     * This method adds $this->_thousandsSeparator between every group of thousands,
+     * and rounds to $this->_roundToDecimal decimal places.  Use the $options parameter
+     * on the constructor to set these values.
+     * 
+     * @param double Number to format
+     * @param mixed  Number of decimal places to round to (null for default)
+     * @param mixed  Character to use for decimal point (null for default)
+     * @param mixed  Character to use for thousands separator (null for default)
+     *
+     * @return string Formatted currency
+     */
     function format($amount, $roundTo = null, $decChar = null, $sep = null) {
         $roundTo = (($this->_roundAutomatically) ?
                    (($roundTo == null) ? $this->_roundToDecimal : $roundTo) :
@@ -305,18 +340,20 @@ class Services_ExchangeRates {
         return $rates;
     }
 
-    function setToDebug() {}
+    function setToDebug() 
+    {
+    }
     
-   /**
-    * Trigger a PEAR error
-    *
-    * To improve performances, the PEAR.php file is included dynamically.
-    * The file is so included only when an error is triggered. So, in most
-    * cases, the file isn't included and performance is much better.
-    *
-    * @param string error message
-    * @param int error code
-    */
+    /**
+     * Trigger a PEAR error
+     *
+     * To improve performances, the PEAR.php file is included dynamically.
+     * The file is so included only when an error is triggered. So, in most
+     * cases, the file isn't included and performance is much better.
+     *
+     * @param string error message
+     * @param int error code
+     */
     function raiseError($msg, $code)
     {
         include_once 'PEAR.php';
