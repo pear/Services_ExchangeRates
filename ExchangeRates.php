@@ -35,6 +35,8 @@ define('SERVICES_EXCHANGERATES_ERROR_RETRIEVAL_FAILED', 104);
 define('SERVICES_EXCHANGERATES_ERROR_INVALID_DATA', 105);
 /**#@-*/
 
+require_once 'Services/ExchangeRates/Transport/Default.php';
+
 /**
  * Exchange Rate package
  *
@@ -90,38 +92,7 @@ class Services_ExchangeRates {
     * @var string
     */
     'decimalCharacter' => ".",
-    
-   /**
-    * Sets the path to where cache files are stored (don't forget the trailing slash!)
-    * @access private
-    * @var string
-    */
-    'cacheDirectory' => '', // todo: default this to ini_get(session.save_path)
-    
-   /**
-    * Sets the length (in seconds) to cache the exchange rate data. This information
-    * is updated daily. Default is 1 hour.
-    * @access private
-    * @var int
-    */
-    'cacheLengthRates' => 3600,
-    
-   /**
-    * Sets the length (in seconds) to cache the list of currencies.  This information
-    * is very rarely updated. Default is 4 weeks.
-    * @access private
-    * @var int
-    */
-    'cacheLengthCurrencies' => 2419200,
-    
-   /**
-    * Sets the length (in seconds) to cache the list of countries.  This information
-    * is very rarely updated. Default is 4 weeks.
-    * @access private
-    * @var int
-    */
-    'cacheLengthCountries' => 2419200,
-    
+
    /**
     * PEAR error mode (when raiseError is called)
     *
@@ -161,41 +132,62 @@ class Services_ExchangeRates {
     * @param string Driver name for country code list (not yet used for anything)
     * @param array  Array to override default settings
     */
-    function Services_ExchangeRates($ratesSource = 'ECB', 
-                                    $currencySource = 'UN', 
-                                    $countrySource = 'UN',
-                                    $options = array(NULL)) {
+    function Services_ExchangeRates($options = array()) {
                                
         $availableOptions = array('roundToDecimal',
                                   'roundAutomatically',
                                   'thousandsSeparator',
-                                  'decimalCharacter',
-                                  'cacheDirectory',
-                                  'cacheLengthRates',
-                                  'cacheLengthCurrencies',
-                                  'cacheLengthCountries');
+                                  'decimalCharacter');
                                   
-        foreach($options as $key => $value) {
-            if(in_array($key, $availableOptions)) {
-                $property = '_'.$key;
+        foreach ($options as $key => $value) {
+            if (in_array($key, $availableOptions)) {
+                $property = $key;
                 $this->$options[$property] = $value;
             }
         }
-    
-        $rateData = $this->retrieveData('Rates_' . $ratesSource, $this->_cacheLengthRates);       
+
+        if (isset($options['transport'])) {
+            $transport = $options['transport'];
+        } else {
+            $transport = new Services_ExchangeRates_Transport_Default();
+        }
+
+        $this->setTransport($transport);
+    }
+
+
+    function setTransport($transport) {
+        $this->transport = $transport;
+    }
+
+    function fetch($rates, $currency) {
+        $rateData = $rates->retrieve();
+
         $this->rates = $rateData['rates'];
         $this->ratesUpdated = $rateData['date'];
         $this->ratesSource = $rateData['source'];
         
-        $this->currencies = $this->retrieveData('Currencies_' . $currencySource, $this->_cacheLengthCurrencies);
+        $this->currencies = $currency->retrieve();
         
-        // not yet implimented, here for future features:
-        // $this->countries = $this->retrieveData('Countries_' . $countriesSource, $this->_cacheLengthCountries);
-        
-        $this->validCurrencies = $this->getValidCurrencies($this->currencies, $this->rates);  
-        
+        $this->validCurrencies = $this->getValidCurrencies($this->currencies, $this->rates);
     }
-    
+
+    public function setCache($cache) {
+        $this->cache = $cache;
+    }    
+
+    function factory($source) {
+        include_once "Services/ExchangeRates/${source}.php";
+
+        $classname = "Services_ExchangeRates_${source}";
+        if (!class_exists($classname)) {
+            return $this->raiseError("No driver exists for the source ${source}... aborting.", SERVICES_EXCHANGERATES_ERROR_INVALID_DRIVER);
+        }
+        $class = new $classname($this->transport);
+
+        return $class;
+    }
+
    /**
     * Factory
     *
@@ -206,15 +198,9 @@ class Services_ExchangeRates {
     * @param int Cache length
     * @return array Associative array containing the data requested
     */
-    function retrieveData($source, $cacheLength) {
-        include_once("Services/ExchangeRates/${source}.php");
-        $classname = "Services_ExchangeRates_${source}";
-        if (!class_exists($classname)) {
-            return $this->raiseError("No driver exists for the source ${source}... aborting.", SERVICES_EXCHANGERATES_ERROR_INVALID_DRIVER);
-        }
-        $class = new $classname;
-         
-        return $class->retrieve($cacheLength, $this->_cacheDirectory);
+    function retrieveData($source) {
+        $class = $this->factory($source);
+        return $class->retrieve();
     }
           
    /**
@@ -297,6 +283,7 @@ class Services_ExchangeRates {
         
         return number_format($amount, $roundTo, $decChar, $sep);
     }
+
     /**
      * Get all rates as compared to a reference currency
      * 
@@ -308,7 +295,7 @@ class Services_ExchangeRates {
      * @see Services_ExchangeRates::convert()
      * @access public
      */
-    function getRates ($referenceCurrency)
+    function getRates($referenceCurrency)
     {
         $rates = array();
         foreach ($this->validCurrencies as $code => $name) {
@@ -317,16 +304,8 @@ class Services_ExchangeRates {
         ksort($rates);
         return $rates;
     }
-   /**
-    * Set to debug mode
-    *
-    * When an error is found, the script will stop and the message will be displayed
-    * (in debug mode only).
-    */
-    function setToDebug()
-    {
-        $this->_pearErrorMode = SERVICES_EXCHANGERATES_ERROR_DIE;
-    }
+
+    function setToDebug() {}
     
    /**
     * Trigger a PEAR error
@@ -340,8 +319,8 @@ class Services_ExchangeRates {
     */
     function raiseError($msg, $code)
     {
-        include_once('PEAR.php');
-        PEAR::raiseError($msg, $code, $this->_pearErrorMode);
+        include_once 'PEAR.php';
+        PEAR::raiseError($msg, $code);
     }
     
 }

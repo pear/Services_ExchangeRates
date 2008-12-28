@@ -36,7 +36,7 @@
 /**
  * Include common functions to handle cache and fetch the file from the server
  */
-require_once 'Services/ExchangeRates/Common.php';
+require_once 'Services/ExchangeRates/Currencies.php';
 
 /**
  * United Nations Currency Codes Driver
@@ -45,7 +45,7 @@ require_once 'Services/ExchangeRates/Common.php';
  * @link http://www.unece.org/etrades/unedocs/repository/codelists/xml/CurrencyCodeList.xml
  * @package Services_ExchangeRates
  */
-class Services_ExchangeRates_Currencies_UN extends Services_ExchangeRates_Common {
+class Services_ExchangeRates_Currencies_UN extends Services_ExchangeRates_Currencies {
 
    /**
     * URL of XML feed
@@ -70,12 +70,17 @@ class Services_ExchangeRates_Currencies_UN extends Services_ExchangeRates_Common
     * @param int Length of time to cache (in seconds)
     * @return array Array of currency codes to exchange rates
     */
-    function retrieve($cacheLength, $cacheDir) {
+    function retrieve() {
     
         // retrieve the feed from the server or cache
-        $root = $this->retrieveXML($this->feedUrl, $cacheLength, $cacheDir);
-    
-        foreach($root->children as $curr) {
+        $root = $this->retrieveXML($this->feedUrl);
+
+        if (empty($root)) {
+            return array();
+        }
+
+        $currencies = array();
+        foreach ($root->children as $curr) {
             // Filter out blank or unwanted elements
             if ($curr->name == "Currency") {
                 // loop through and put them into an array

@@ -40,14 +40,14 @@
 /**
  * Include common functions to handle cache and fetch the file from the server
  */
-require_once 'Services/ExchangeRates/Common.php';
+require_once 'Services/ExchangeRates/Rates.php';
 
 /**
  * European Central Bank Exchange Rate Driver
  *
  * @package Services_ExchangeRates
  */
-class Services_ExchangeRates_Rates_ECB extends Services_ExchangeRates_Common {
+class Services_ExchangeRates_Rates_ECB extends Services_ExchangeRates_Rates {
    /**
     * URL of XML feed
     * @access private
@@ -70,7 +70,7 @@ class Services_ExchangeRates_Rates_ECB extends Services_ExchangeRates_Common {
     * @param int Length of time to cache (in seconds)
     * @return array Multi-dimensional array
     */
-    function retrieve($cacheLength, $cacheDir) {
+    function retrieve() {
     
         // IMPORTANT: defines Euro mapping.  Without this, you can't convert 
         // to or from the Euro!
@@ -79,7 +79,7 @@ class Services_ExchangeRates_Rates_ECB extends Services_ExchangeRates_Common {
         $return['source'] = $this->_feedXMLUrl;
         
         // retrieve the feed from the server or cache
-        $root = $this->retrieveXML($this->_feedXMLUrl, $cacheLength, $cacheDir);
+        $root = $this->retrieveXML($this->_feedXMLUrl);
     
         // set date published
         $return['date'] = $root->children[5]->children[1]->attributes['time'];

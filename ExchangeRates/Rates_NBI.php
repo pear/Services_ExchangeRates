@@ -34,14 +34,14 @@
 /**
  * Include common functions to handle cache and fetch the file from the server
  */
-require_once 'Services/ExchangeRates/Common.php';
+require_once 'Services/ExchangeRates/Rates.php';
 
 /**
  * National Bank of Israel Currency Exchange Rates Driver
  *
  * @package Services_ExchangeRates
  */
-class Services_ExchangeRates_Rates_NBI extends Services_ExchangeRates_Common {
+class Services_ExchangeRates_Rates_NBI extends Services_ExchangeRates_Rates {
 
    /**
     * URL of XML feed
@@ -66,7 +66,7 @@ class Services_ExchangeRates_Rates_NBI extends Services_ExchangeRates_Common {
     * @param int Length of time to cache (in seconds)
     * @return array Multi-dimensional array
     */
-    function retrieve($cacheLength, $cacheDir) {
+    function retrieve() {
     
         // IMPORTANT: defines ILS mapping.  Without this, you can't convert 
         // to or from ILS!
@@ -75,24 +75,51 @@ class Services_ExchangeRates_Rates_NBI extends Services_ExchangeRates_Common {
         $return['source'] = $this->_feedXMLUrl;
         
         // retrieve the feed from the server or cache
-        $root = $this->retrieveXML($this->_feedXMLUrl, $cacheLength, $cacheDir);
-   	
-        // set date published
-        $return['date'] = $root->children[0]->content;
+        $root = $this->retrieveXML($this->_feedXMLUrl);
         
-        // get down to array of exchange rates
-        $xrates = $root->children;
-        
+        // determine date
+        foreach ($root->children as $rateinfo) {
+            if ($rateinfo->name == "LAST_UPDATE") {
+                $return['date'] = $rateinfo->content;
+            }
+        }
+
         // loop through and put them into an array
-        foreach ($xrates as $rateinfo) {
-        	if ($rateinfo->children[4]->content != 0) {
-            	$return['rates'][$rateinfo->children[2]->content] = 
-            		1 / $rateinfo->children[4]->content 
-            		* $rateinfo->children[1]->content;
-        	}
+        foreach ($root->children as $rateinfo) {
+            list($conversion_rate, $currency_code, $currency_rate) = $this->_extractNodeInformation($rateinfo);
+
+            if (empty($conversion_rate) || empty($currency_code) || empty($currency_rate)) {
+                continue;
+            }
+
+        	$return['rates'][$currency_code] = 1 / $currency_rate * $conversion_rate;
         }
         
         return $return; 
+    }
+
+    function _extractNodeInformation($rateinfo) {
+        $currency_code = false;
+        $conversion_rate = false;
+        $currency_rate = false;
+        
+        foreach ($rateinfo->children as $node) {
+            switch ($node->name) {
+                case 'CURRENCYCODE':
+                    $currency_code = $node->content;
+                    break;
+
+                case 'RATE':
+                    $currency_rate = $node->content;
+                    break;
+
+                case 'UNIT':
+                    $conversion_rate = $node->content;
+                    break;
+            }
+        }
+
+        return array($conversion_rate, $currency_code, $currency_rate);
     }
 }
 ?>

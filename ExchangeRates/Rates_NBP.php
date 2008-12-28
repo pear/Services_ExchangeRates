@@ -42,14 +42,14 @@
 /**
  * Include common functions to handle cache and fetch the file from the server
  */
-require_once 'Services/ExchangeRates/Common.php';
+require_once 'Services/ExchangeRates/Rates.php';
 
 /**
  * National Bank of Poland Exchange Rate Driver
  *
  * @package Services_ExchangeRates
  */
-class Services_ExchangeRates_Rates_NBP extends Services_ExchangeRates_Common {
+class Services_ExchangeRates_Rates_NBP extends Services_ExchangeRates_Rates {
 
    /**
     * URL of XML feed
@@ -84,12 +84,12 @@ class Services_ExchangeRates_Rates_NBP extends Services_ExchangeRates_Common {
     * @param int Length of time to cache (in seconds)
     * @return array 
     */
-    function retrieve($cacheLength, $cacheDir) {
+    function retrieve() {
 
         $return['rates'] = array('PLN' => 1.0);
 
         // retrieve XML address
-        $htmlpage = $this->retrieveFile($this->feedHTMLUrl, $cacheLength, $cacheDir);
+        $htmlpage = $this->retrieveFile($this->feedHTMLUrl);
 
         // Example line is:
         // <div class="file"><a href="xml/a055z020319.xml">powysza tabela w formacie .xml</a></div>
@@ -100,19 +100,19 @@ class Services_ExchangeRates_Rates_NBP extends Services_ExchangeRates_Common {
         }
         $this->feedXMLUrl = $this->feedDir . $match[1];
 
-        $return['source'] = $this->_feedXMLUrl;
+        $return['source'] = $this->feedXMLUrl;
 
         // retrieve the feed from the server or cache
-        $root = $this->retrieveXML($this->feedXMLUrl, $cacheLength, $cacheDir);
+        $root = $this->retrieveXML($this->feedXMLUrl);
 
         // get down to array of exchange rates
         foreach ($root->children as $rateinfo) {
-            if ($rateinfo->name == 'pozycja')
-            {
-                $rateinfo->children[4]->content = strtr($rateinfo->children[4]->content, ',', '.');
-                $value = $rateinfo->children[2]->content  // przelicznik (conversion rate)
-                       / $rateinfo->children[4]->content; // currency rate
-                $return['rates'][$rateinfo->children[3]->content] = $value;
+
+            if ($rateinfo->name == 'pozycja') {
+                list($conversion_rate, $currency_code, $currency_rate) = $this->_extractNodeInformation($rateinfo);
+
+                @$value = $conversion_rate / $currency_rate;
+                $return['rates'][$currency_code] = $value;
             } elseif ($rateinfo->name == 'data_publikacji')
             {
                 // set date published
@@ -123,7 +123,30 @@ class Services_ExchangeRates_Rates_NBP extends Services_ExchangeRates_Common {
         return $return; 
 
     }
+    
+    /**
+     * @todo Todo: a better way to iterate over all children and extract out these!
+     * @todo Unit test me please
+     */
+    function _extractNodeInformation($rateinfo) {
+        /*
+           <pozycja>
+              <nazwa_waluty>korona estońska</nazwa_waluty>
+              <przelicznik>1</przelicznik>
+              <kod_waluty>EEK</kod_waluty>
+              <kurs_sredni>0,2622</kurs_sredni>
 
+           </pozycja>
+        */
+
+        // Child node position may vary, unfortunately.
+
+        $conversion_rate = $rateinfo->children[3]->content;
+        $currency_code   = $rateinfo->children[5]->content;
+        $currency_rate   = strtr($rateinfo->children[7]->content, ',', '.'); //Translate from polish to english style numbers.
+
+        return array($conversion_rate, $currency_code, $currency_rate);
+    }
 }
 
 ?>

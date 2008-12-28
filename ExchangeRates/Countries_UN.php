@@ -56,12 +56,12 @@ class Services_ExchangeRates_Countries_UN extends Services_ExchangeRates_Common 
     * @param int Optionally override default 1 month cache length (in seconds)
     * @return array Array of currency codes to currency names
     */   
-    function retrieve($cacheLength, $cacheDir) {
+    function retrieve() {
         
         // retrieve the feed from the server or cache
-        $root = $this->retrieveXML($this->feedUrl, $cacheLength, $cacheDir);
+        $root = $this->retrieveXML($this->feedUrl);
     
-        foreach($root->children as $curr) {
+        foreach ($root->children as $curr) {
             // Filter out blank or unwanted elements
             if ($curr->name == "Country") {
                 // loop through and put them into an array
@@ -75,4 +75,3 @@ class Services_ExchangeRates_Countries_UN extends Services_ExchangeRates_Common 
 
 }
 
-?>
