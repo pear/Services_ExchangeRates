@@ -95,7 +95,7 @@ class Services_ExchangeRates_Rates_NBP extends Services_ExchangeRates_Common {
         // <div class="file"><a href="xml/a055z020319.xml">powysza tabela w formacie .xml</a></div>
         if (!preg_match('#href="(xml/a\d+z\d+\.xml)"#', $htmlpage, $match))
         {
-           Services_ExchangeRates::raiseError("Retrieved url " . $this->feedHTMLUrl . " has no link to XML page", SERVICES_EXCHANGERATES_RETRIEVAL_FAILED);
+           Services_ExchangeRates::raiseError("Retrieved url " . $this->feedHTMLUrl . " has no link to XML page", SERVICES_EXCHANGERATES_ERROR_RETRIEVAL_FAILED);
            return false;
         }
         $this->feedXMLUrl = $this->feedDir . $match[1];
