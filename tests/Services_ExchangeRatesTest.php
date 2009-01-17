@@ -200,8 +200,43 @@ class Services_ExchangeRatesTest extends PHPUnit_Framework_TestCase {
         $this->assertSame("1!234^6", $rates->format(1234.56, 1, "^", "!"));
     }
 
-    public function testShouldFetchAllRates() {
-        $this->markTestIncomplete(' No coverage of: getRates($referenceCurrency)');
+    public function testShouldFetchAllRatesAndSortAlphabetically() {
+        $rates = new Services_ExchangeRates();
+        $rates->validCurrencies['MONKIES'] = "Monkey Moolah";
+        $rates->validCurrencies['GOLDFISH'] = "Goldfishian Dollars";
+        $rates->validCurrencies['USD'] = "American Dollars";
+
+        $rates->rates['USD'] = 1.00;
+        $rates->rates['MONKIES'] = 0.52;
+        $rates->rates['GOLDFISH'] = 52.00;
+
+        
+
+        $expected = array();
+        $expected['GOLDFISH'] = 52.00;
+        $expected['MONKIES'] = 0.52;
+        $expected['USD'] = 1.00;
+
+        $this->assertSame($expected, $rates->getRates('USD'));
     }
 
+    public function testShouldPerformConversionsWhenFetchingAllRates() {
+        $rates = new Services_ExchangeRates();
+        $rates->validCurrencies['MONKIES'] = "Monkey Moolah";
+        $rates->validCurrencies['GOLDFISH'] = "Goldfishian Dollars";
+        $rates->validCurrencies['USD'] = "American Dollars";
+
+        $rates->rates['USD'] = 1.00;
+        $rates->rates['MONKIES'] = 0.5;
+        $rates->rates['GOLDFISH'] = 50.00;
+
+        
+
+        $expected = array();
+        $expected['GOLDFISH'] = 1.00;
+        $expected['MONKIES'] = 0.01;
+        $expected['USD'] = 0.02;
+
+        $this->assertSame($expected, $rates->getRates('GOLDFISH'));
+    }
 }
