@@ -131,7 +131,7 @@ class Services_ExchangeRates
         foreach ($options as $key => $value) {
             if (in_array($key, $availableOptions)) {
                 $property = $key;
-                $this->$options[$property] = $value;
+                $this->options[$property] = $value;
             }
         }
 
@@ -318,11 +318,13 @@ class Services_ExchangeRates
      * @return string Formatted currency
      */
     function format($amount, $roundTo = null, $decChar = null, $sep = null) {
-        $roundTo = (($this->_roundAutomatically) ?
-                   (($roundTo == null) ? $this->_roundToDecimal : $roundTo) :
+
+
+        $roundTo = (($this->options['roundAutomatically']) ?
+                   (($roundTo == null) ? $this->options['roundToDecimal'] : $roundTo) :
                    '');
-        $decChar  = ($decChar == null) ? $this->_decimalCharacter : $decChar;
-        $sep = ($sep == null) ? $this->_thousandsSeparator : $sep;
+        $decChar  = ($decChar == null) ? $this->options['decimalCharacter'] : $decChar;
+        $sep = ($sep == null) ? $this->options['thousandsSeparator'] : $sep;
 
         return number_format($amount, $roundTo, $decChar, $sep);
     }

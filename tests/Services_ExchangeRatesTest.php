@@ -106,12 +106,98 @@ class Services_ExchangeRatesTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($rates->isValidCurrency('AUD'));
     }
 
-    public function testShouldConvertOriginalCurrencyToNewCurrency() {
-        $this->markTestIncomplete(' No coverage of: convert($from, $to, $amount, $format = true)');
+    public function testShouldNotConvertInvalidCurrencies() {
+        $rates = new Services_ExchangeRates();
+
+        $this->assertFalse($rates->convert('GOLDFISH', 'MONKIES', 1.00));
+
+        $rates = new Services_ExchangeRates();
+        $rates->validCurrencies['GOLDFISH'] = "Goldfishian Dollars";
+
+        $this->assertFalse($rates->convert('GOLDFISH', 'MONKIES', 1.00));
+
+        $rates = new Services_ExchangeRates();
+        $rates->validCurrencies['MONKIES'] = "Monkey Moolah";
+
+        $this->assertFalse($rates->convert('GOLDFISH', 'MONKIES', 1.00, false));
+
     }
+
+
+    public function testShouldConvertOriginalCurrencyToNewCurrency1() {
+        $rates = new Services_ExchangeRates();
+        $rates->validCurrencies['MONKIES'] = "Monkey Moolah";
+        $rates->validCurrencies['GOLDFISH'] = "Goldfishian Dollars";
+        $rates->rates['GOLDFISH'] = 1.00;
+        $rates->rates['MONKIES'] = 1.00;
+
+        $this->assertSame(1.00, $rates->convert('GOLDFISH', 'MONKIES', 1.00, false));
+    }
+
+    public function testShouldConvertOriginalCurrencyToNewCurrency2() {
+        $rates = new Services_ExchangeRates();
+        $rates->validCurrencies['MONKIES'] = "Monkey Moolah";
+        $rates->validCurrencies['GOLDFISH'] = "Goldfishian Dollars";
+        $rates->rates['GOLDFISH'] = 1.00;
+        $rates->rates['MONKIES'] = 0.99;
+
+        $this->assertSame(0.99, $rates->convert('GOLDFISH', 'MONKIES', 1.00, false));
+    }
+
+    public function testShouldConvertOriginalCurrencyToNewCurrency3() {
+        $rates = new Services_ExchangeRates();
+        $rates->validCurrencies['MONKIES'] = "Monkey Moolah";
+        $rates->validCurrencies['GOLDFISH'] = "Goldfishian Dollars";
+        $rates->rates['GOLDFISH'] = 0.99;
+        $rates->rates['MONKIES'] = 1.00;
+
+        $this->assertSame(1.00, $rates->convert('GOLDFISH', 'MONKIES', 0.99, false));
+    }
+
+    public function testShouldFormatConvertedCurrenciesByDefault() {
+        $rates = new Services_ExchangeRates();
+        $rates->validCurrencies['MONKIES'] = "Monkey Moolah";
+        $rates->validCurrencies['GOLDFISH'] = "Goldfishian Dollars";
+        $rates->rates['GOLDFISH'] = -1000.00;
+        $rates->rates['MONKIES'] = 1.00;
+
+        $this->assertSame("-1,000.00", $rates->convert('MONKIES', 'GOLDFISH', 1.00));
+    }
+
     
     public function testShouldFormatCurrency() {
-        $this->markTestIncomplete(' No coverage of: format($amount, $roundTo = null, $decChar = null, $sep = null)');
+        $rates = new Services_ExchangeRates();
+        $this->assertSame("1,234.56", $rates->format(1234.56));
+    }
+
+    public function testShouldFormatCurrencyByFunctionArguments() {
+        $rates = new Services_ExchangeRates();
+        $this->assertSame("1!234^6", $rates->format(1234.56, 1, "^", "!"));
+
+    }
+
+    public function testShouldFormatCurrencyByObjectOptions() {
+        $args = array('roundToDecimal' => 1,
+                                                  'roundAutomatically' => true,
+                                                  'thousandsSeparator' => "!",
+                                                  'decimalCharacter' => "^");
+
+        $rates = new Services_ExchangeRates($args);
+
+        $this->assertSame($args, $rates->options);
+
+        $this->assertSame("1!234^6", $rates->format(1234.56));
+    }
+
+
+
+    public function testShouldFormatCurrencyByObjectOptionsUnlessFunctionArgumentsAreUsed() {
+        $rates = new Services_ExchangeRates(array('roundToDecimal' => 355,
+                                                  'roundAutomatically' => true,
+                                                  'thousandsSeparator' => "*",
+                                                  'decimalCharacter' => "*"));
+
+        $this->assertSame("1!234^6", $rates->format(1234.56, 1, "^", "!"));
     }
 
     public function testShouldFetchAllRates() {
