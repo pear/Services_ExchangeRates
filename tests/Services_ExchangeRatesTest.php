@@ -96,19 +96,26 @@ class Services_ExchangeRatesTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testShouldValidateCurrencyCode() {
-        $this->markTestIncomplete(" No coverage of: isValidCurrency($code)");
+        $rates = new Services_ExchangeRates();
+
+        // First, with no currencies loaded
+        $this->assertFalse($rates->isValidCurrency("AUD"));
+
+        // Now, load a currency and check its valid.
+        $rates->validCurrencies['AUD'] = 1.00;
+        $this->assertTrue($rates->isValidCurrency('AUD'));
     }
 
     public function testShouldConvertOriginalCurrencyToNewCurrency() {
-        $this->markTestIncomplete(" No coverage of: convert($from, $to, $amount, $format = true)");
+        $this->markTestIncomplete(' No coverage of: convert($from, $to, $amount, $format = true)');
     }
     
     public function testShouldFormatCurrency() {
-        $this->markTestIncomplete(" No coverage of: format($amount, $roundTo = null, $decChar = null, $sep = null)");
+        $this->markTestIncomplete(' No coverage of: format($amount, $roundTo = null, $decChar = null, $sep = null)');
     }
 
     public function testShouldFetchAllRates() {
-        $this->markTestIncomplete(" No coverage of: getRates($referenceCurrency)");
+        $this->markTestIncomplete(' No coverage of: getRates($referenceCurrency)');
     }
 
 }
