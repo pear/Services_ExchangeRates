@@ -56,7 +56,7 @@ class Services_ExchangeRates_Rates_NBP extends Services_ExchangeRates_Rates {
     * @var string
     */
     var $feedXMLUrl;
-    
+
    /**
     * URL of HTML page where the XML feed URL is given
     * @var string
@@ -82,7 +82,7 @@ class Services_ExchangeRates_Rates_NBP extends Services_ExchangeRates_Rates {
     * @link http://www.nbp.pl/Kursy/KursyA.html Polish HTML version (with link to XML)
     *
     * @param int Length of time to cache (in seconds)
-    * @return array 
+    * @return array
     */
     function retrieve() {
 
@@ -106,24 +106,21 @@ class Services_ExchangeRates_Rates_NBP extends Services_ExchangeRates_Rates {
         $root = $this->retrieveXML($this->feedXMLUrl);
 
         // get down to array of exchange rates
-        foreach ($root->children as $rateinfo) {
+        foreach ($root['pozycja'] as $rateinfo) {
+            list($conversion_rate, $currency_code, $currency_rate) = $this->_extractNodeInformation($rateinfo);
 
-            if ($rateinfo->name == 'pozycja') {
-                list($conversion_rate, $currency_code, $currency_rate) = $this->_extractNodeInformation($rateinfo);
-
-                @$value = $conversion_rate / $currency_rate;
-                $return['rates'][$currency_code] = $value;
-            } elseif ($rateinfo->name == 'data_publikacji')
-            {
-                // set date published
-                $return['date'] = $rateinfo->content;
-            }
+            @$value = $conversion_rate / $currency_rate;
+            $return['rates'][$currency_code] = $value;
         }
-        
-        return $return; 
+
+
+        // set date published
+        $return['date'] = $root['data_publikacji'];
+
+        return $return;
 
     }
-    
+
     /**
      * @todo Todo: a better way to iterate over all children and extract out these!
      * @todo Unit test me please
@@ -141,9 +138,9 @@ class Services_ExchangeRates_Rates_NBP extends Services_ExchangeRates_Rates {
 
         // Child node position may vary, unfortunately.
 
-        $conversion_rate = $rateinfo->children[3]->content;
-        $currency_code   = $rateinfo->children[5]->content;
-        $currency_rate   = strtr($rateinfo->children[7]->content, ',', '.'); //Translate from polish to english style numbers.
+        $conversion_rate = $rateinfo['przelicznik'];
+        $currency_code   = $rateinfo['kod_waluty'];
+        $currency_rate   = strtr($rateinfo['kurs_sredni'], ',', '.'); //Translate from polish to english style numbers.
 
         return array($conversion_rate, $currency_code, $currency_rate);
     }

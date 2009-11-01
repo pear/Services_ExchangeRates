@@ -21,10 +21,10 @@ class Services_ExchangeRatesCommonTest extends PHPUnit_Framework_TestCase {
         $provider = new Services_ExchangeRates_Common($transport);
 
         $data = $provider->retrieveXML('http://example.com/');
-        $this->assertSame("Hello", $data->content);
+        $this->assertSame("Hello", $data);
 
         $data = $provider->retrieveXML('http://example.com/');
-        $this->assertSame("World", $data->content);
+        $this->assertSame("World", $data);
     }
 
 }

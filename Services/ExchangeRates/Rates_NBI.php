@@ -25,12 +25,12 @@
  *
  * @link 	http://www.bankisrael.gov.il/eng.shearim/
  *
- * @author 	Simon Brüchner <powtac@gmx.de>	
+ * @author 	Simon Brüchner <powtac@gmx.de>
  * @copyright Copyright 2003 Simon Brüchner
  * @license http://www.php.net/license/2_02.txt PHP License 2.0
  * @package Services_ExchangeRates
  */
- 
+
 /**
  * Include common functions to handle cache and fetch the file from the server
  */
@@ -49,10 +49,10 @@ class Services_ExchangeRates_Rates_NBI extends Services_ExchangeRates_Rates {
     * @var string
     */
     var $_feedXMLUrl = 'http://www.bankisrael.gov.il/heb.shearim/currency.php';
-       
+
    /**
-    * Downloads exchange rates in terms of the ILS (New Israeli Shequel) from 
-    * the National Bank of Israel. This information is updated daily, 
+    * Downloads exchange rates in terms of the ILS (New Israeli Shequel) from
+    * the National Bank of Israel. This information is updated daily,
     * and is cached by default for 1 hour.
     *
     * Returns a multi-dimensional array containing:
@@ -67,25 +67,20 @@ class Services_ExchangeRates_Rates_NBI extends Services_ExchangeRates_Rates {
     * @return array Multi-dimensional array
     */
     function retrieve() {
-    
-        // IMPORTANT: defines ILS mapping.  Without this, you can't convert 
+
+        // IMPORTANT: defines ILS mapping.  Without this, you can't convert
         // to or from ILS!
         $return['rates'] = array('ILS' => 1.0);
-    
+
         $return['source'] = $this->_feedXMLUrl;
-        
+
         // retrieve the feed from the server or cache
         $root = $this->retrieveXML($this->_feedXMLUrl);
-        
-        // determine date
-        foreach ($root->children as $rateinfo) {
-            if ($rateinfo->name == "LAST_UPDATE") {
-                $return['date'] = $rateinfo->content;
-            }
-        }
+
+        $return['date'] = $root["LAST_UPDATE"];
 
         // loop through and put them into an array
-        foreach ($root->children as $rateinfo) {
+        foreach ($root["CURRENCY"] as $rateinfo) {
             list($conversion_rate, $currency_code, $currency_rate) = $this->_extractNodeInformation($rateinfo);
 
             if (empty($conversion_rate) || empty($currency_code) || empty($currency_rate)) {
@@ -94,30 +89,14 @@ class Services_ExchangeRates_Rates_NBI extends Services_ExchangeRates_Rates {
 
         	$return['rates'][$currency_code] = 1 / $currency_rate * $conversion_rate;
         }
-        
-        return $return; 
+
+        return $return;
     }
 
     function _extractNodeInformation($rateinfo) {
-        $currency_code = false;
-        $conversion_rate = false;
-        $currency_rate = false;
-        
-        foreach ($rateinfo->children as $node) {
-            switch ($node->name) {
-                case 'CURRENCYCODE':
-                    $currency_code = $node->content;
-                    break;
-
-                case 'RATE':
-                    $currency_rate = $node->content;
-                    break;
-
-                case 'UNIT':
-                    $conversion_rate = $node->content;
-                    break;
-            }
-        }
+        $currency_code = $rateinfo['CURRENCYCODE'];
+        $currency_rate =  $rateinfo['RATE'];
+        $conversion_rate = $rateinfo['UNIT'];
 
         return array($conversion_rate, $currency_code, $currency_rate);
     }

@@ -21,10 +21,10 @@
 /**
  * Exchange rate driver - European Central Bank
  *
- * The reference rates are based on the regular daily concertation 
- * procedure between central banks within and outside the European System 
+ * The reference rates are based on the regular daily concertation
+ * procedure between central banks within and outside the European System
  * of Central Banks, which normally takes place at 2.15 p.m. ECB time (CET).
- * The reference exchange rates are published both by electronic market 
+ * The reference exchange rates are published both by electronic market
  * information providers and on the ECB's website shortly after the
  * concertation procedure has been completed.
  *
@@ -36,7 +36,7 @@
  * @license http://www.php.net/license/2_02.txt PHP License 2.0
  * @package Services_ExchangeRates
  */
- 
+
 /**
  * Include common functions to handle cache and fetch the file from the server
  */
@@ -54,7 +54,7 @@ class Services_ExchangeRates_Rates_ECB extends Services_ExchangeRates_Rates {
     * @var string
     */
     var $_feedXMLUrl = 'http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml';
-       
+
    /**
     * Downloads exchange rates in terms of the Euro from the European Central Bank. This
     * information is updated daily, and is cached by default for 1 hour.
@@ -71,29 +71,30 @@ class Services_ExchangeRates_Rates_ECB extends Services_ExchangeRates_Rates {
     * @return array Multi-dimensional array
     */
     function retrieve() {
-    
-        // IMPORTANT: defines Euro mapping.  Without this, you can't convert 
+
+        // IMPORTANT: defines Euro mapping.  Without this, you can't convert
         // to or from the Euro!
         $return['rates'] = array('EUR' => 1.0);
-    
+
         $return['source'] = $this->_feedXMLUrl;
-        
+
+
         // retrieve the feed from the server or cache
         $root = $this->retrieveXML($this->_feedXMLUrl);
-    
+
+
         // set date published
-        $return['date'] = $root->children[5]->children[1]->attributes['time'];
-        
+        $return['date'] = $root["Cube"]["Cube"]['time'];
+
         // get down to array of exchange rates
-        $xrates = $root->children[5]->children[1]->children;
-        
+        $xrates = $root["Cube"]["Cube"]["Cube"];
+
+
         // loop through and put them into an array
         foreach ($xrates as $rateinfo) {
-            if ($rateinfo->name == 'Cube') {
-            	$return['rates'][$rateinfo->attributes['currency']] = $rateinfo->attributes['rate'];
-            }
+            $return['rates'][$rateinfo['currency']] = $rateinfo['rate'];
         }
-        return $return; 
+        return $return;
     }
 }
 

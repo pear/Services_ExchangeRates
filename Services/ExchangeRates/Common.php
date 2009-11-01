@@ -60,7 +60,7 @@ class Services_ExchangeRates_Common {
     function retrieveFile($url) {
         return $this->transport->fetch($url);
     }
-    
+
    /**
     * Downloads XML file or returns it from cache
     *
@@ -69,16 +69,26 @@ class Services_ExchangeRates_Common {
     * @return object XML_Tree object
     */
     function retrieveXML($url) {
-        include_once 'XML/Tree.php';
-        
+        include_once 'XML/Unserializer.php';
+
         if ($data = $this->retrieveFile($url)) {
 
-            $tree = new XML_Tree();
-            $root =& $tree->getTreeFromString($data);
-        
-            return $root;
+            $options = array(
+                              XML_UNSERIALIZER_OPTION_ATTRIBUTES_PARSE    => true,
+                              XML_UNSERIALIZER_OPTION_ATTRIBUTES_ARRAYKEY => false
+                            );
+
+            $unserializer = new XML_Unserializer($options);
+
+            $status = $unserializer->unserialize($data, false);
+
+            if (PEAR::isError($status)) {
+                return $status;
+            }
+
+            return $unserializer->getUnserializedData();
         }
-        
+
         return false;
     }
 
