@@ -61,10 +61,11 @@ $country_rate_xml = '<?xml version="1.0" encoding="ISO-8859-2"?>
 
         //Compare strings here to avoid floating point SNAFU
         $this->assertSame("1", (string)$data['rates']["PLN"]);
-        $this->assertSame("11.7924528302", (string)$data['rates']["THB"]);
+        $this->assertSame("11.792452830", substr((string)$data['rates']["THB"], 0, 12));
 
-        $this->assertSame("0.341145566813", (string)$data['rates']["USD"]);
-        $this->assertSame("0.500475451679", (string)$data['rates']["AUD"]);
+
+        $this->assertSame("0.341145566813", substr((string)$data['rates']["USD"], 0, 14));
+        $this->assertSame("0.500475451679", substr((string)$data['rates']["AUD"], 0, 14));
 
         $this->assertSame("2008-12-24", $data['date']);
         $this->assertSame("http://www.nbp.pl/Kursy/xml/a251z081224.xml", $data['source']);     
