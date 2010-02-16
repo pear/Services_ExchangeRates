@@ -44,8 +44,8 @@ class Services_ExchangeRates_RatesNBITest extends PHPUnit_Framework_TestCase {
 
         //Cast to string to avoid floating point snafu
         $this->assertSame("1", (string)$data['rates']["ILS"]);
-        $this->assertSame("0.258197779499", (string)$data['rates']["USD"]);
-        $this->assertSame("1.42653352354", (string)$data['rates']["EGP"]);
+        $this->assertSame("0.258197779499", substr((string)$data['rates']["USD"], 0, 14));
+        $this->assertSame("1.42653352354", substr((string)$data['rates']["EGP"], 0, 13));
 
         $this->assertSame("2008-12-24", $data['date']);
         $this->assertSame("http://www.bankisrael.gov.il/heb.shearim/currency.php", $data['source']);     
