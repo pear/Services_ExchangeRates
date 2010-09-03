@@ -26,7 +26,7 @@
  */
 
 require_once 'Services/ExchangeRates/Transport/Default.php';
-
+require_once 'XML/Unserializer.php';
 /**
  * Common functions for data retrieval
  *
@@ -69,8 +69,6 @@ class Services_ExchangeRates_Common {
     * @return object XML_Tree object
     */
     function retrieveXML($url) {
-        include_once 'XML/Unserializer.php';
-
         if ($data = $this->retrieveFile($url)) {
 
             $options = array(
