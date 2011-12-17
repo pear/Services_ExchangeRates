@@ -20,7 +20,7 @@ supported depends on the exchange rate feed used).</description>
   <active>no</active>
  </lead>
  <date>2011-12-17</date>
- <time>23:46:47</time>
+ <time>23:48:18</time>
  <version>
   <release>0.7.0</release>
   <api>0.7.0</api>
@@ -34,6 +34,7 @@ supported depends on the exchange rate feed used).</description>
 QA release
 Refactoring to use XML_Serializer, not XML_Tree.
 Bug #16753 Currencies_UN.php links to broken URL
+Require PHP5
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -59,12 +60,13 @@ Bug #16753 Currencies_UN.php links to broken URL
    <file baseinstalldir="/" md5sum="89ed7e953e09c4e55eeec7ced49d73ee" name="tests/Services_ExchangeRates_RatesNBPTest.php" role="test" />
    <file baseinstalldir="/" md5sum="a85d976e90b49c9629ebc199293792dd" name="tests/Services_ExchangeRates_RatesTest.php" role="test" />
    <file baseinstalldir="/" md5sum="e34b2fa11be8ae5bea356c8199b1f260" name="example.php" role="doc" />
+   <file baseinstalldir="/" md5sum="bfeac1d166705e8152d1b04be59f1ad4" name="Services_ExchangeRates-0.7.0.tgz" role="data" />
   </dir>
  </contents>
  <dependencies>
   <required>
    <php>
-    <min>4.4.9</min>
+    <min>5.0.0</min>
    </php>
    <pearinstaller>
     <min>1.9.0</min>
@@ -226,6 +228,7 @@ Be aware: You&apos;ll have to update code which was using 0.5.X API!
 QA release
 Refactoring to use XML_Serializer, not XML_Tree.
 Bug #16753 Currencies_UN.php links to broken URL
+Require PHP5
    </notes>
   </release>
  </changelog>
