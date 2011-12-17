@@ -60,7 +60,6 @@ Require PHP5
    <file baseinstalldir="/" md5sum="89ed7e953e09c4e55eeec7ced49d73ee" name="tests/Services_ExchangeRates_RatesNBPTest.php" role="test" />
    <file baseinstalldir="/" md5sum="a85d976e90b49c9629ebc199293792dd" name="tests/Services_ExchangeRates_RatesTest.php" role="test" />
    <file baseinstalldir="/" md5sum="e34b2fa11be8ae5bea356c8199b1f260" name="example.php" role="doc" />
-   <file baseinstalldir="/" md5sum="bfeac1d166705e8152d1b04be59f1ad4" name="Services_ExchangeRates-0.7.0.tgz" role="data" />
   </dir>
  </contents>
  <dependencies>
