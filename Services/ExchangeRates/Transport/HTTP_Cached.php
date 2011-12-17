@@ -36,6 +36,7 @@ class Services_ExchangeRates_Transport_HTTP_Cached
     * modified, it is downloaded and cached.
     *
     * @param string URL of remote file to retrieve
+    *
     * @return string File contents
     */
     function fetch($url) 
@@ -49,7 +50,11 @@ class Services_ExchangeRates_Transport_HTTP_Cached
         // if $cache->get($cacheID) found the file, but it was expired, 
         // $cache->_file will exist 
         if (isset($this->cache->_file) && file_exists($this->cache->_file)) {
-            $this->request->addHeader('If-Modified-Since', gmdate("D, d M Y H:i:s", filemtime($this->cache->_file)) ." GMT");
+            $this->request->addHeader(
+                'If-Modified-Since',
+                gmdate("D, d M Y H:i:s",
+                filemtime($this->cache->_file)) ." GMT"
+            );
         }
         
         $response = $this->request->send();
@@ -67,6 +72,9 @@ class Services_ExchangeRates_Transport_HTTP_Cached
             return $data;
         }
         
-        throw new Services_ExchangeRates_Exception("Unable to retrieve file ${url} (unknown reason)", SERVICES_EXCHANGERATES_ERROR_RETRIEVAL_FAILED);
+        throw new Services_ExchangeRates_Exception(
+            "Unable to retrieve file ${url} (unknown reason)",
+            SERVICES_EXCHANGERATES_ERROR_RETRIEVAL_FAILED
+        );
     }
 }
