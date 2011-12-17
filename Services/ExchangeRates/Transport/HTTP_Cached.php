@@ -50,7 +50,7 @@ class Services_ExchangeRates_Transport_HTTP_Cached
         // if $cache->get($cacheID) found the file, but it was expired, 
         // $cache->_file will exist 
         if (isset($this->cache->_file) && file_exists($this->cache->_file)) {
-            $this->request->addHeader(
+            $this->request->setHeader(
                 'If-Modified-Since',
                 gmdate("D, d M Y H:i:s",
                 filemtime($this->cache->_file)) ." GMT"
