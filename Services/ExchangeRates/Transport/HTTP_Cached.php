@@ -1,15 +1,29 @@
 <?php
 /**
+ * PHP Version 5
+ *
+ * @package   Services_ExchangeRates
+ * @author    Marshall Roch <marshall@exclupen.com>
+ * @author    Colin Ross <cross@php.net>
+ * @author    Daniel O'Connor <daniel.oconnor@gmail.com>
+ * @copyright Copyright 2003 Marshall Roch
+ * @license   http://www.php.net/license/2_02.txt PHP License 2.0
+ */
+
+/**
  * Cache_Lite is needed to cache the feeds
  */
 require_once 'Cache/Lite.php';
 require_once 'HTTP/Request2.php';
 require_once 'Services/ExchangeRates/Exception.php';
 
-class Services_ExchangeRates_Transport_HTTP_Cached {
+class Services_ExchangeRates_Transport_HTTP_Cached 
+{
     var $cache;
+    protected $request;
 
-    public function __construct(Cache_Lite $cache, HTTP_Request2 $request) {
+    public function __construct(Cache_Lite $cache, HTTP_Request2 $request) 
+    {
         $this->cache = $cache;
         $this->request = $request;
     }
@@ -24,7 +38,8 @@ class Services_ExchangeRates_Transport_HTTP_Cached {
     * @param string URL of remote file to retrieve
     * @return string File contents
     */
-    function fetch($url) {
+    function fetch($url) 
+    {
         $cacheID = md5($url);
                                         
         if ($data = $this->cache->get($cacheID)) {

@@ -1,12 +1,15 @@
 <?php
-class Services_ExchangeRates_Transport_Mock {
+class Services_ExchangeRates_Transport_Mock
+{
     var $responses;
 
-    function Services_ExchangeRates_Transport_Mock($responses = array()) {
+    public function __construct($responses = array()) 
+    {
         $this->responses = $responses;
     }
 
-    function fetch($url) {
+    public function fetch($url) 
+    {
         if (!empty($this->responses)) {
             return array_shift($this->responses);
         }
