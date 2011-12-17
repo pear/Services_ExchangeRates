@@ -81,7 +81,7 @@ class Services_ExchangeRates_Common {
             $status = $unserializer->unserialize($data, false);
 
             if ($status instanceof PEAR_Error) {
-                throw new Services_ExchangeRates_Exception(get_class($status) . ":" $status->getMessage());
+                throw new Services_ExchangeRates_Exception(get_class($status) . ":" . $status->getMessage());
             }
 
             return $unserializer->getUnserializedData();
