@@ -17,6 +17,14 @@ require_once 'Cache/Lite.php';
 require_once 'HTTP/Request2.php';
 require_once 'Services/ExchangeRates/Exception.php';
 
+/**
+ * A HTTP transport class, with caching.
+ *
+ * @package   Services_ExchangeRates
+ * @author    Daniel O'Connor <daniel.oconnor@gmail.com>
+ * @copyright Copyright 2009 Daniel O'Cconor
+ * @license   http://www.php.net/license/2_02.txt PHP License 2.0
+ */
 class Services_ExchangeRates_Transport_HTTP_Cached 
 {
     var $cache;
