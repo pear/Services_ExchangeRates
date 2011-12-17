@@ -3,7 +3,8 @@
  * Cache_Lite is needed to cache the feeds
  */
 require_once 'Cache/Lite.php';
-include_once 'HTTP/Request2.php';
+require_once 'HTTP/Request2.php';
+require_once 'Services/ExchangeRates/Exception.php';
 
 class Services_ExchangeRates_Transport_HTTP_Cached {
     var $cache;
@@ -51,8 +52,6 @@ class Services_ExchangeRates_Transport_HTTP_Cached {
             return $data;
         }
         
-        Services_ExchangeRates::raiseError("Unable to retrieve file ${url} (unknown reason)", SERVICES_EXCHANGERATES_ERROR_RETRIEVAL_FAILED);
-
-        return false;
+        throw new Services_ExchangeRates_Exception("Unable to retrieve file ${url} (unknown reason)", SERVICES_EXCHANGERATES_ERROR_RETRIEVAL_FAILED);
     }
 }

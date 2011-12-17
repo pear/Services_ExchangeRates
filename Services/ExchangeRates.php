@@ -36,7 +36,7 @@ define('SERVICES_EXCHANGERATES_ERROR_INVALID_DATA', 105);
 /**#@-*/
 
 require_once 'Services/ExchangeRates/Transport/Default.php';
-
+require_once 'Services/ExchangeRates/Exception.php';
 /**
  * Exchange Rate package
  *
@@ -210,7 +210,7 @@ class Services_ExchangeRates
 
         $classname = "Services_ExchangeRates_${source}";
         if (!class_exists($classname)) {
-            return $this->raiseError("No driver exists for the source ${source}... aborting.", SERVICES_EXCHANGERATES_ERROR_INVALID_DRIVER);
+            throw new Services_ExchangeRates_Exception("No driver exists for the source ${source}... aborting.", SERVICES_EXCHANGERATES_ERROR_INVALID_DRIVER);
         }
         $class = new $classname($this->transport);
 
@@ -269,7 +269,6 @@ class Services_ExchangeRates
     function isValidCurrency($code)
     {
         if (!in_array($code, array_keys($this->validCurrencies))) {
-            $this->raiseError('Error: Invalid currency: ' . $code, SERVICES_EXCHANGERATES_ERROR_INVALID_CURRENCY);
             return false;
         }
 
@@ -288,19 +287,20 @@ class Services_ExchangeRates
      */
     function convert($from, $to, $amount, $format = true)
     {
-
-        if ($this->isValidCurrency($from) && $this->isValidCurrency($to)) {
-
-            // Convert $from to whatever the base currency of the
-            // exchange rate feed is.
-            $base = (1 / $this->rates[$from]) * $amount;
-            // Convert from base currency to $to
-            $final = $this->rates[$to] * $base;
-            return ($format) ? $this->format($final) : $final;
+        if (!$this->isValidCurrency($from)) {
+            throw new InvalidArgumentException($from . " is not a valid currency");
         }
-        $this->raiseError('Unable to convert!', SERVICES_EXCHANGERATES_ERROR_CONVERSION_ERROR);
-        return false;
 
+        if (!$this->isValidCurrency($to)) {
+            throw new InvalidArgumentException($to . " is not a valid currency");
+        }
+
+        // Convert $from to whatever the base currency of the
+        // exchange rate feed is.
+        $base = (1 / $this->rates[$from]) * $amount;
+        // Convert from base currency to $to
+        $final = $this->rates[$to] * $base;
+        return ($format) ? $this->format($final) : $final;
     }
 
     /**
@@ -350,26 +350,4 @@ class Services_ExchangeRates
         return $rates;
     }
 
-    function setToDebug()
-    {
-    }
-
-    /**
-     * Trigger a PEAR error
-     *
-     * To improve performances, the PEAR.php file is included dynamically.
-     * The file is so included only when an error is triggered. So, in most
-     * cases, the file isn't included and performance is much better.
-     *
-     * @param string error message
-     * @param int error code
-     */
-    function raiseError($msg, $code)
-    {
-        include_once 'PEAR.php';
-        PEAR::raiseError($msg, $code);
-    }
-
 }
-
-?>

@@ -109,18 +109,24 @@ class Services_ExchangeRatesTest extends PHPUnit_Framework_TestCase {
     public function testShouldNotConvertInvalidCurrencies() {
         $rates = new Services_ExchangeRates();
 
-        $this->assertFalse($rates->convert('GOLDFISH', 'MONKIES', 1.00));
+        try {
+            $rates->convert('GOLDFISH', 'MONKIES', 1.00);
+
+            $this->fail("GOLDFISH is not a valid currency");
+        } catch (InvalidArgumentException $iae) {
+            $this->assertSame("GOLDFISH is not a valid currency", $iae->getMessage());
+        }
 
         $rates = new Services_ExchangeRates();
         $rates->validCurrencies['GOLDFISH'] = "Goldfishian Dollars";
 
-        $this->assertFalse($rates->convert('GOLDFISH', 'MONKIES', 1.00));
+        try {
+            $rates->convert('GOLDFISH', 'MONKIES', 1.00);
 
-        $rates = new Services_ExchangeRates();
-        $rates->validCurrencies['MONKIES'] = "Monkey Moolah";
-
-        $this->assertFalse($rates->convert('GOLDFISH', 'MONKIES', 1.00, false));
-
+            $this->fail("MONKIES is not a valid currency");
+        } catch (InvalidArgumentException $iae) {
+            $this->assertSame("MONKIES is not a valid currency", $iae->getMessage());
+        }
     }
 
 

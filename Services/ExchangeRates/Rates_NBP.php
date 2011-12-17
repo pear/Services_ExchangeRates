@@ -43,6 +43,7 @@
  * Include common functions to handle cache and fetch the file from the server
  */
 require_once 'Services/ExchangeRates/Rates.php';
+require_once 'Services/ExchangeRates/Exception.php';
 
 /**
  * National Bank of Poland Exchange Rate Driver
@@ -95,8 +96,7 @@ class Services_ExchangeRates_Rates_NBP extends Services_ExchangeRates_Rates {
         // <div class="file"><a href="xml/a055z020319.xml">powysza tabela w formacie .xml</a></div>
         if (!preg_match('#href="(xml/a\d+z\d+\.xml)"#', $htmlpage, $match))
         {
-           Services_ExchangeRates::raiseError("Retrieved url " . $this->feedHTMLUrl . " has no link to XML page", SERVICES_EXCHANGERATES_ERROR_RETRIEVAL_FAILED);
-           return false;
+           throw new Services_ExchangeRates_Exception("Retrieved url " . $this->feedHTMLUrl . " has no link to XML page", SERVICES_EXCHANGERATES_ERROR_RETRIEVAL_FAILED);
         }
         $this->feedXMLUrl = $this->feedDir . $match[1];
 
