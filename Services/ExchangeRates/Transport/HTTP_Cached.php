@@ -3,20 +3,12 @@
  * Cache_Lite is needed to cache the feeds
  */
 require_once 'Cache/Lite.php';
-include_once 'HTTP/Request.php';
+include_once 'HTTP/Request2.php';
 
 class Services_ExchangeRates_Transport_HTTP_Cached {
     var $cache;
 
-    function Services_ExchangeRates_Transport_HTTP_Cached($cache, $request) {
-        if (!is_object($cache)) {
-            $cache = new Cache_Lite();
-        }
-
-        if (!is_object($request)) {
-            $request = new HTTP_Request();
-        }
-
+    public function __construct(Cache_Lite $cache, HTTP_Request2 $request) {
         $this->cache = $cache;
         $this->request = $request;
     }
@@ -44,11 +36,11 @@ class Services_ExchangeRates_Transport_HTTP_Cached {
             $this->request->addHeader('If-Modified-Since', gmdate("D, d M Y H:i:s", filemtime($this->cache->_file)) ." GMT");
         }
         
-        $this->request->sendRequest();
+        $response = $this->request->send();
         
-        if (!($this->request->getResponseCode() == 304)) {
+        if (!($this->response->getStatus() == 304)) {
             // data is changed, so save it to cache
-            $data = $this->request->getResponseBody();
+            $data = $response->getBody();
             $this->cache->save($data, $cacheID);
 
             return $data;
