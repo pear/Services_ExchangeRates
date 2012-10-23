@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.9.2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+<package packagerversion="1.9.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>Services_ExchangeRates</name>
  <channel>pear.php.net</channel>
  <summary>Performs currency conversion</summary>
@@ -19,11 +19,11 @@ supported depends on the exchange rate feed used).</description>
   <email>cross@php.net</email>
   <active>no</active>
  </lead>
- <date>2011-12-17</date>
- <time>23:48:18</time>
+ <date>2012-10-24</date>
+ <time>08:38:53</time>
  <version>
-  <release>0.7.0</release>
-  <api>0.7.0</api>
+  <release>0.8.0</release>
+  <api>0.8.0</api>
  </version>
  <stability>
   <release>beta</release>
@@ -32,34 +32,39 @@ supported depends on the exchange rate feed used).</description>
  <license uri="http://www.php.net/license">PHP License</license>
  <notes>
 QA release
-Refactoring to use XML_Serializer, not XML_Tree.
-Bug #16753 Currencies_UN.php links to broken URL
-Require PHP5
+
+Request #16628	Swap to XML_Serializer
+
+Bug #17110	Unit tests broken, 64 bit
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
+   <file baseinstalldir="/" md5sum="d032100e1dd4125a14845c42d3d60cbe" name="build/logs/junit.xml" role="data" />
    <file baseinstalldir="/" md5sum="804e5de5ca17b9e2d23ac7e35230b13b" name="data/CurrencyCodeList.xml" role="data" />
-   <file baseinstalldir="/" md5sum="6835c0fd7c6db389f68ffb4f64695dd0" name="Services/ExchangeRates.php" role="php" />
-   <file baseinstalldir="/" md5sum="e2fb70db46b52b2c72d99d65357d7a90" name="Services/ExchangeRates/Common.php" role="php" />
+   <file baseinstalldir="/" md5sum="47c2601bc504ea4a90907fd55e51690f" name="Services/ExchangeRates.php" role="php" />
+   <file baseinstalldir="/" md5sum="ed040704bdcdd0672ac0eef954af91e6" name="Services/ExchangeRates/Common.php" role="php" />
    <file baseinstalldir="/" md5sum="01b1f005228c834381d5e1df80def70a" name="Services/ExchangeRates/Currencies.php" role="php" />
    <file baseinstalldir="/" md5sum="e2d7db80fdcc9bb81fde55edae9468d8" name="Services/ExchangeRates/Currencies_UN.php" role="php" />
+   <file baseinstalldir="/" md5sum="918962fabcc97fa7ee81d9735a17ce5c" name="Services/ExchangeRates/Exception.php" role="php" />
    <file baseinstalldir="/" md5sum="e740705ae0024183ac4e9456c7ce7471" name="Services/ExchangeRates/Rates.php" role="php" />
    <file baseinstalldir="/" md5sum="e8f4d8119e4dc7501b3a5ff09bdaf6b4" name="Services/ExchangeRates/Rates_ECB.php" role="php" />
    <file baseinstalldir="/" md5sum="fe66ab7e2862bf6a35da67da82412421" name="Services/ExchangeRates/Rates_NBI.php" role="php" />
-   <file baseinstalldir="/" md5sum="2181f630c82ec562ac78460105d6bfbc" name="Services/ExchangeRates/Rates_NBP.php" role="php" />
-   <file baseinstalldir="/" md5sum="ffa6377cc09f8684f62261da4355a7a7" name="Services/ExchangeRates/Transport/Default.php" role="php" />
-   <file baseinstalldir="/" md5sum="542dad7b111ab8d8e89eb4a29aad10c0" name="Services/ExchangeRates/Transport/HTTP_Cached.php" role="php" />
-   <file baseinstalldir="/" md5sum="693f626150909e378774c98d561309ee" name="Services/ExchangeRates/Transport/Mock.php" role="php" />
+   <file baseinstalldir="/" md5sum="959a0f884fa514f12165a2c590eb89b0" name="Services/ExchangeRates/Rates_NBP.php" role="php" />
+   <file baseinstalldir="/" md5sum="bbabf2926529f9af1ce265cec7937a1b" name="Services/ExchangeRates/Transport/Default.php" role="php" />
+   <file baseinstalldir="/" md5sum="5ca49af4ca0e6cbe9ced23fdb00b76b7" name="Services/ExchangeRates/Transport/HTTP_Cached.php" role="php" />
+   <file baseinstalldir="/" md5sum="e46a097e3819b8f5a4c26cac917aa4a5" name="Services/ExchangeRates/Transport/Mock.php" role="php" />
    <file baseinstalldir="/" md5sum="aa9e798816bed1cf7ff0555b5897e186" name="tests/AllTests.php" role="test" />
    <file baseinstalldir="/" md5sum="ea6b4b2c7c5d279f17b787080e31daea" name="tests/Services_ExchangeRatesCommonTest.php" role="test" />
-   <file baseinstalldir="/" md5sum="717665156eed7c77d4b70bdef9c48c8a" name="tests/Services_ExchangeRatesTest.php" role="test" />
+   <file baseinstalldir="/" md5sum="1236c7283577273464d23ffc5913b198" name="tests/Services_ExchangeRatesTest.php" role="test" />
    <file baseinstalldir="/" md5sum="28b525af7f8228a6565a6d89786ea456" name="tests/Services_ExchangeRates_CurrenciesTest.php" role="test" />
    <file baseinstalldir="/" md5sum="9021eb886b2bc5e66406df35dd82afbc" name="tests/Services_ExchangeRates_CurrenciesUNTest.php" role="test" />
    <file baseinstalldir="/" md5sum="32ecc3e278dea7873d9bdac82f00b75e" name="tests/Services_ExchangeRates_RatesECBTest.php" role="test" />
    <file baseinstalldir="/" md5sum="4aa5a3ef4eedfd616f5a4012d13843fd" name="tests/Services_ExchangeRates_RatesNBITest.php" role="test" />
    <file baseinstalldir="/" md5sum="89ed7e953e09c4e55eeec7ced49d73ee" name="tests/Services_ExchangeRates_RatesNBPTest.php" role="test" />
    <file baseinstalldir="/" md5sum="a85d976e90b49c9629ebc199293792dd" name="tests/Services_ExchangeRates_RatesTest.php" role="test" />
+   <file baseinstalldir="/" md5sum="7386412fed531358035b1f7f856c5ff7" name="build.xml" role="data" />
    <file baseinstalldir="/" md5sum="e34b2fa11be8ae5bea356c8199b1f260" name="example.php" role="doc" />
+   <file baseinstalldir="/" md5sum="fd419070ce8b861323c8a5e990d04072" name="phpunit.xml" role="data" />
   </dir>
  </contents>
  <dependencies>
@@ -228,6 +233,25 @@ QA release
 Refactoring to use XML_Serializer, not XML_Tree.
 Bug #16753 Currencies_UN.php links to broken URL
 Require PHP5
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.8.0</release>
+    <api>0.8.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2012-10-24</date>
+   <license uri="http://www.php.net/license">PHP License</license>
+   <notes>
+QA release
+
+Request #16628	Swap to XML_Serializer
+
+Bug #17110	Unit tests broken, 64 bit
    </notes>
   </release>
  </changelog>
