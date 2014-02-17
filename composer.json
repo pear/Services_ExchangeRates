@@ -1,0 +1,36 @@
+{
+    "authors": [
+        {
+            "email": "marshall@exclupen.com",
+            "name": "Marshall Roch",
+            "role": "Lead"
+        },
+        {
+            "email": "cross@php.net",
+            "name": "Colin Ross",
+            "role": "Lead"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Services_ExchangeRates": "./"
+        }
+    },
+    "description": "More info available on: http://pear.php.net/package/Services_ExchangeRates",
+    "include-path": [
+        "./"
+    ],
+    "license": "PHP License",
+    "name": "pear/services_exchangerates",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Services_ExchangeRates",
+        "source": "https://github.com/pear/Services_ExchangeRates"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
